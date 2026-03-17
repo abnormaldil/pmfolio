@@ -23,7 +23,7 @@ export default function WebsitesStack({ websites }) {
     }, []);
 
     return (
-        <div ref={containerRef} className="w-full flex flex-col">
+        <div ref={containerRef} className="w-full flex flex-col ">
             {websites.map((site, i) => (
                 <div
                     key={site.id}
@@ -37,21 +37,21 @@ export default function WebsitesStack({ websites }) {
                         transformOrigin: 'top center',
                     }}
                 >
-                    <div className="w-full rounded-2xl overflow-hidden" style={{ background: '#1a1a2e', minHeight: '520px' }}>
-                        <div className="flex justify-between items-center px-10 py-6">
+                    <div className="webstack-card-container w-full flex flex-col" style={{ background: '#0a0a0a', borderRadius: '32px', aspectRatio: '16/9', padding: '56px' }}>
+                        <div className="webstack-header flex justify-between items-center w-full shrink-0" style={{ paddingBottom: '40px' }}>
                             <p className="uppercase tracking-[0.2em] text-white"
-                                style={{ fontFamily: 'Thedus-c', fontWeight: 700, fontSize: 'clamp(11px, 1vw, 14px)' }}>
+                                style={{ fontFamily: 'Thedus-wl', fontWeight: 500, fontSize: 'clamp(10px, 1.5vw, 20px)' }}>
                                 TOOLS USED :&nbsp;
                                 <span style={{ color: '#aaa', fontWeight: 400, letterSpacing: '0.1em' }}>{site.tools}</span>
                             </p>
-                            {site.liveUrl && (
-                                <a href={site.liveUrl} target="_blank" rel="noopener noreferrer"
-                                    className="flex items-center gap-3 uppercase text-white hover:opacity-80 transition-opacity"
-                                    style={{ fontFamily: 'Thedus-c', fontWeight: 700, fontSize: 'clamp(11px, 1vw, 14px)', letterSpacing: '0.2em', textDecoration: 'none' }}>
+                            {site.link && (
+                                <a href={site.link} target="_blank" rel="noopener noreferrer"
+                                    className="flex items-center gap-4 uppercase text-white hover:opacity-80 transition-opacity"
+                                    style={{ fontFamily: 'Thedus-wl', fontWeight: 500, fontSize: 'clamp(10px, 1.5vw, 20px)', letterSpacing: '0.2em', textDecoration: 'none' }}>
                                     VISIT LIVE
-                                    <span className="flex items-center justify-center w-9 h-9 bg-[#D00000] rounded">
-                                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                            <path d="M3 13L13 3M13 3H6M13 3V10" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                    <span className="flex items-center justify-center bg-[#e03047] rounded hover:scale-105 transition-transform shrink-0" style={{ width: '40px', height: '40px' }}>
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                            <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
                                         </svg>
                                     </span>
                                 </a>
@@ -69,8 +69,8 @@ export default function WebsitesStack({ websites }) {
 
                             if (slides.length === 0) {
                                 return (
-                                    <div className="mx-8 mb-8 rounded-xl flex items-center justify-center"
-                                        style={{ minHeight: '400px', background: cardGradients[i % cardGradients.length] }}>
+                                    <div className="w-full overflow-hidden flex items-center justify-center flex-1"
+                                        style={{ background: cardGradients[i % cardGradients.length], borderRadius: '24px' }}>
                                         <p className="text-white/30 uppercase tracking-[0.3em]"
                                             style={{ fontFamily: 'Thedus, sans-serif', fontWeight: 700, fontSize: '13px' }}>
                                             {site.Title}

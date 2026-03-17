@@ -58,12 +58,12 @@ export default function CreativeProjectModal({ item, onClose }) {
                     100% { --angle: 360deg; }
                 }
                 @keyframes close-ring-pulse {
-                    0%, 100% { box-shadow: 0 0 0 0 rgba(208,0,0,0.4); }
-                    50% { box-shadow: 0 0 0 8px rgba(208,0,0,0); }
+                    0%, 100% { box-shadow: 0 0 0 0 rgba(224,48,71,0.4); }
+                    50% { box-shadow: 0 0 0 8px rgba(224,48,71,0); }
                 }
                 @keyframes dot-glow {
-                    0%, 100% { box-shadow: 0 0 4px 1px rgba(208,0,0,0.3); }
-                    50% { box-shadow: 0 0 8px 3px rgba(208,0,0,0.6); }
+                    0%, 100% { box-shadow: 0 0 4px 1px rgba(224,48,71,0.3); }
+                    50% { box-shadow: 0 0 8px 3px rgba(224,48,71,0.6); }
                 }
                 @keyframes counter-fade-in {
                     from { opacity: 0; transform: translateY(-4px); }
@@ -83,7 +83,7 @@ export default function CreativeProjectModal({ item, onClose }) {
                 {/* Close Button — with pulse ring on hover */}
                 <button
                     onClick={onClose}
-                    className="absolute top-4 right-4 lg:top-8 lg:right-8 z-50 flex items-center justify-center w-12 h-12 rounded-full bg-white/10 text-white hover:bg-[#D00000] hover:scale-110 transition-all duration-300 ease-[cubic-bezier(0.19,1,0.22,1)] backdrop-blur-md shadow-2xl group"
+                    className="absolute top-4 right-4 lg:top-8 lg:right-8 z-50 flex items-center justify-center w-12 h-12 rounded-full bg-white/10 text-white hover:bg-[#e03047] hover:scale-110 transition-all duration-300 ease-[cubic-bezier(0.19,1,0.22,1)] backdrop-blur-md shadow-2xl group"
                     aria-label="Close"
                     style={{ animation: 'close-ring-pulse 2s ease-in-out infinite' }}
                 >
@@ -112,7 +112,7 @@ export default function CreativeProjectModal({ item, onClose }) {
                             </h3>
                         )}
                         {item.description && (
-                            <p className="text-white/70 text-xs md:text-sm leading-relaxed max-w-[700px] mx-auto uppercase tracking-[0.1em]" style={{ fontFamily: 'Thedus-cl' }}>
+                            <p className="text-white/70 text-xs md:text-sm leading-relaxed max-w-[700px] mx-auto uppercase tracking-[0.1em]" style={{ fontFamily: 'Thedus-wl' }}>
                                 {item.description}
                             </p>
                         )}
@@ -125,8 +125,8 @@ export default function CreativeProjectModal({ item, onClose }) {
                                 className="relative w-full max-w-[1200px] rounded-2xl overflow-hidden shadow-2xl"
                                 style={{
                                     padding: '1px',
-                                    background: 'linear-gradient(135deg, rgba(208,0,0,0.3), rgba(255,255,255,0.05) 40%, rgba(208,0,0,0.15) 60%, rgba(255,255,255,0.05))',
-                                    animation: 'modal-border-glow 4s ease-in-out infinite',
+                                    background: 'linear-gradient(135deg, rgba(224,48,71,0.3), rgba(255,255,255,0.05) 40%, rgba(224,48,71,0.15) 60%, rgba(255,255,255,0.05))',
+                                    
                                 }}
                             >
                                 <div
@@ -182,7 +182,7 @@ export default function CreativeProjectModal({ item, onClose }) {
                                             className="absolute top-4 right-4 z-20 px-3 py-1 rounded-full backdrop-blur-md border border-white/10"
                                             style={{
                                                 backgroundColor: 'rgba(0,0,0,0.5)',
-                                                fontFamily: 'Thedus-cl',
+                                                fontFamily: 'Thedus-wl',
                                                 fontSize: '11px',
                                                 fontWeight: 600,
                                                 letterSpacing: '0.15em',
@@ -231,7 +231,7 @@ export default function CreativeProjectModal({ item, onClose }) {
                                         width: idx === current ? '24px' : '6px',
                                         height: '6px',
                                         borderRadius: '3px',
-                                        backgroundColor: idx === current ? '#D00000' : 'rgba(255,255,255,0.4)',
+                                        backgroundColor: idx === current ? '#e03047' : 'rgba(255,255,255,0.4)',
                                         border: 'none',
                                         cursor: 'pointer',
                                         transition: 'all 0.5s cubic-bezier(0.19,1,0.22,1)',

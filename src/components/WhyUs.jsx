@@ -94,21 +94,17 @@ export default function WhyUs() {
                 });
             }
 
-            /* ── Bottom Section fade up ── */
+            /* ── Bottom Section fade in ── */
             if (bottomRef.current) {
-                gsap.set(bottomRef.current, { y: 30, opacity: 0 });
+                gsap.set(bottomRef.current, { opacity: 0 });
                 gsap.to(bottomRef.current, {
-                    y: 0,
                     opacity: 1,
-                    duration: 1,
-                    ease: 'power3.out',
-
+                    duration: 1.2,
+                    ease: 'power2.out',
                     scrollTrigger: {
-                        trigger: bottomRef.current,
-                        start: 'top 50%',
-
+                        trigger: sectionRef.current,
+                        start: 'top 75%',
                         toggleActions: 'play none none reverse',
-                        markers: false,
                     },
                 });
             }
@@ -122,7 +118,7 @@ export default function WhyUs() {
         <section
             id="about"
             ref={sectionRef}
-            className="snap-y snap-mandatory overflow-y-scroll h-screen relative w-full min-h-screen bg-black overflow-hidden flex flex-col"
+            className="snap-y snap-mandatory h-screen relative w-full min-h-screen bg-black overflow-hidden flex flex-col"
             style={{
                 paddingLeft: 'clamp(24px, 3vw, 48px)',
                 paddingRight: 'clamp(24px, 3vw, 48px)',
@@ -140,9 +136,10 @@ export default function WhyUs() {
                         className="uppercase text-white tracking-[-0.01em] whitespace-nowrap"
                         style={{
                             fontFamily: 'Humane-l',
-                            fontSize: 'clamp(70px, 18.2vw, 340px)',
+                            fontSize: 'clamp(110px, 18.2vw, 340px)',
                             transformOrigin: 'bottom center',
                             lineHeight: 0.82,
+                            paddingTop: 'clamp(0px, 1vh, 15px)',
                         }}
                     >
                         {'WHY BRANDS CHOOSE'.split('').map((ch, i) => (
@@ -165,9 +162,10 @@ export default function WhyUs() {
                             className="uppercase text-white tracking-[-0.01em] whitespace-nowrap"
                             style={{
                                 fontFamily: 'Humane-l',
-                                fontSize: 'clamp(70px, 18.2vw, 340px)',
+                                fontSize: 'clamp(110px, 18.5vw, 340px)',
                                 transformOrigin: 'bottom center',
                                 lineHeight: 0.82,
+                                paddingTop: 'clamp(12px, 6vh, 15px)',
                             }}
                         >
                             {'PIXELATED ?'.split('').map((ch, i) => (
@@ -189,9 +187,9 @@ export default function WhyUs() {
                         style={{
                             fontFamily: 'Thedus-wl',
                             fontWeight: 300,
-                            fontSize: 'clamp(20px, 1.2vw, 18px)',
-                            maxWidth: 'clamp(280px, 32vw, 440px)',
-                            paddingBottom: '6px',
+                            fontSize: 'clamp(14px, 1.2vw, 20px)',
+                            maxWidth: 'clamp(280px, 40vw, 440px)',
+                            paddingBottom: 'clamp(0px, 15vh, 25px)',
                         }}
                     >
                         WE DON&apos;T JUST DELIVER FILES.<br />
@@ -206,12 +204,12 @@ export default function WhyUs() {
             </div>
 
             {/* ── BOTTOM: Avatars + Trust ── */}
-            <div
+            {/* <div
                 ref={bottomRef}
                 className="flex items-center gap-5 mt-6"
-            >
-                {/* Avatar Stack */}
-                <div className="flex -space-x-3">
+            > */}
+            {/* Avatar Stack */}
+            {/* <div className="flex -space-x-3">
                     {['dilu', 'nakul', 'kiran', 'kk'].map((person, i) => (
                         <div
                             key={person}
@@ -226,14 +224,14 @@ export default function WhyUs() {
                             />
                         </div>
                     ))}
-                </div>
+                </div> */}
 
-                {/* Trust Text + Stars */}
-                <div className="flex flex-col justify-center">
+            {/* Trust Text + Stars */}
+            {/* <div className="flex flex-col justify-center">
                     <p
                         className="uppercase text-white/70 tracking-[0.2em]"
                         style={{
-                            fontFamily: 'Thedus-cl',
+                            fontFamily: 'Thedus-wl',
                             fontWeight: 700,
                             fontSize: 'clamp(9px, 0.8vw, 13px)',
                         }}
@@ -243,10 +241,10 @@ export default function WhyUs() {
                     <div className="flex gap-[3px] mt-1">
                         {[...Array(5)].map((_, i) => (
                             <span key={i} className="text-[#EACE69] text-sm md:text-base">★</span>
-                        ))}
-                    </div>
-                </div>
-            </div>
+                    ))}
+                    </div> */}
+            {/* </div>
+            </div> */}
         </section>
     );
 }

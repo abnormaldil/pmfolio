@@ -9,6 +9,8 @@ import ErrorBoundary from '@/components/ErrorBoundary';
 import { fetchPortfolioData } from '@/lib/fetchPortfolioData';
 import PortfolioChatbot from '@/components/PortfolioChatbot';
 
+export const dynamic = "force-dynamic";
+
 
 export const metadata = {
   title: 'Pixelated | Digital Design Agency',
@@ -39,10 +41,6 @@ export default async function HomePage() {
 
       <ErrorBoundary name="Portfolio">
         <Web websitesData={websites} creativesData={creatives} />
-      </ErrorBoundary>
-
-      <ErrorBoundary name="Contact">
-        <Contact />
       </ErrorBoundary>
 
       <Footer />

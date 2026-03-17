@@ -69,7 +69,7 @@ export async function POST(request) {
             replyTo: email,
             html: `
                 <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-                    <h2 style="color: #D00000; margin-bottom: 20px;">New Contact Form Submission</h2>
+                    <h2 style="color: #e03047; margin-bottom: 20px;">New Contact Form Submission</h2>
                     <table style="width: 100%; border-collapse: collapse;">
                         <tr>
                             <td style="padding: 10px; font-weight: bold; border-bottom: 1px solid #eee;">Name</td>
@@ -104,7 +104,7 @@ export async function POST(request) {
             html: `
                 <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 30px; background: #fafafa;">
                     <div style="background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.08);">
-                        <h2 style="color: #D00000; margin-top: 0;">Thanks for reaching out!</h2>
+                        <h2 style="color: #e03047; margin-top: 0;">Thanks for reaching out!</h2>
                         <p style="color: #333; line-height: 1.7;">Hi ${name},</p>
                         <p style="color: #333; line-height: 1.7;">
                             Thank you for contacting us. We've received your message and truly appreciate you taking the time to reach out.
@@ -118,7 +118,7 @@ export async function POST(request) {
                         <p style="color: #333; line-height: 1.7;">Looking forward to connecting with you.</p>
                         <p style="color: #333; line-height: 1.7; margin-bottom: 0;">
                             Best regards,<br>
-                            <strong style="color: #D00000;">Pixelated Media</strong>
+                            <strong style="color: #e03047;">Pixelated Media</strong>
                         </p>
                     </div>
                 </div>

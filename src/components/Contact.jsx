@@ -1,15 +1,13 @@
 'use client';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-if (typeof window !== 'undefined') {
-    gsap.registerPlugin(ScrollTrigger);
-}
+import { useGSAP } from '@gsap/react';
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export default function Contact() {
+    const router = useRouter();
     const [form, setForm] = useState({ name: '', email: '', message: '' });
     const [errors, setErrors] = useState({});
     const [status, setStatus] = useState('idle');
@@ -22,124 +20,82 @@ export default function Contact() {
     const formBoxRef = useRef(null);
     const formInnerRef = useRef(null);
 
-    /* ── GSAP scroll animations ── */
-    useEffect(() => {
-        const init = () => {
-            const ctx = gsap.context(() => {
+    /* ── GSAP on-load animations (no scroll) ── */
+    useGSAP(() => {
+        const tl = gsap.timeline({ delay: 0.1 });
 
-                /* ── headline: scroll-scrub word color fill ── */
-                const allWords = sectionRef.current?.querySelectorAll('.word-fill') || [];
-                // Start dim, fill to white on scroll
-                if (allWords.length) {
-                    gsap.to(allWords, {
-                        color: '#ffffff',
-                        ease: 'power1.in',
-                        stagger: 1,
-                        scrollTrigger: {
-                            trigger: sectionRef.current,
-                            start: 'top 70%',
-                            end: 'center center',
-                            scrub: true,
-                        },
-                    });
-                }
-
-                /* ── each headline line slides up with 3D rotation ── */
-                const lines = [line1Ref.current, line2Ref.current, line3Ref.current].filter(Boolean);
-                gsap.set(lines, {
-                    y: 100,
-                    opacity: 0,
-                    rotateX: -20,
-                    transformPerspective: 1000,
-                    transformOrigin: 'bottom center',
-                });
-
-                gsap.to(lines, {
-                    y: 0,
-                    opacity: 1,
-                    rotateX: 0,
-                    duration: 1.2,
-                    stagger: 0.15,
-                    ease: 'power4.out',
-                    scrollTrigger: {
-                        trigger: sectionRef.current,
-                        start: 'top 75%',
-                        toggleActions: 'play none none reverse',
-                    },
-                });
-
-                /* ── form box: slow clipPath reveal from bottom ── */
-                if (formBoxRef.current) {
-                    gsap.set(formBoxRef.current, {
-                        clipPath: 'polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)',
-                        opacity: 0,
-                    });
-
-                    gsap.to(formBoxRef.current, {
-                        clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
-                        opacity: 1,
-                        duration: 1.2,
-                        ease: 'circ.inOut',
-                        scrollTrigger: {
-                            trigger: formBoxRef.current,
-                            start: 'top 80%',
-                            toggleActions: 'play none none reverse',
-                        },
-                    });
-                }
-
-                /* ── form fields stagger in after box reveals ── */
-                const fields = formInnerRef.current?.querySelectorAll('.form-field') || [];
-                const btns = formInnerRef.current?.querySelectorAll('.form-btn') || [];
-
-                if (fields.length) {
-                    gsap.set(fields, { y: 50, opacity: 0 });
-                    gsap.to(fields, {
-                        y: 0,
-                        opacity: 1,
-                        duration: 0.7,
-                        stagger: 0.12,
-                        ease: 'power3.out',
-                        delay: 0.5,
-                        scrollTrigger: {
-                            trigger: formBoxRef.current,
-                            start: 'top 75%',
-                            toggleActions: 'play none none reverse',
-                        },
-                    });
-                }
-
-                if (btns.length) {
-                    gsap.set(btns, { y: 30, opacity: 0, scale: 0.92 });
-                    gsap.to(btns, {
-                        y: 0,
-                        opacity: 1,
-                        scale: 1,
-                        duration: 0.6,
-                        stagger: 0.08,
-                        ease: 'back.out(1.4)',
-                        delay: 1,
-                        scrollTrigger: {
-                            trigger: formBoxRef.current,
-                            start: 'top 75%',
-                            toggleActions: 'play none none reverse',
-                        },
-                    });
-                }
-
-            }, sectionRef);
-
-            return () => ctx.revert();
-        };
-
-        let cleanup;
-        if (typeof document !== 'undefined' && document.fonts) {
-            document.fonts.ready.then(() => { cleanup = init(); });
-        } else {
-            cleanup = init();
+        /* ── headline: word color fill ── */
+        const allWords = sectionRef.current?.querySelectorAll('.word-fill') || [];
+        if (allWords.length) {
+            tl.to(allWords, {
+                color: '#ffffff',
+                ease: 'power1.in',
+                stagger: 0.1,
+                duration: 0.8,
+            }, 0);
         }
-        return () => { if (cleanup) cleanup(); };
-    }, []);
+
+        /* ── each headline line slides up with 3D rotation ── */
+        const lines = [line1Ref.current, line2Ref.current, line3Ref.current].filter(Boolean);
+        gsap.set(lines, {
+            y: 100,
+            opacity: 0,
+            rotateX: -20,
+            transformPerspective: 1000,
+            transformOrigin: 'bottom center',
+        });
+
+        tl.to(lines, {
+            y: 0,
+            opacity: 1,
+            rotateX: 0,
+            duration: 1,
+            stagger: 0.15,
+            ease: 'power4.out',
+        }, 0);
+
+        /* ── form box: slow clipPath reveal from bottom ── */
+        if (formBoxRef.current) {
+            gsap.set(formBoxRef.current, {
+                clipPath: 'polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)',
+                opacity: 0,
+            });
+
+            tl.to(formBoxRef.current, {
+                clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
+                opacity: 1,
+                duration: 1,
+                ease: 'circ.inOut',
+            }, 0.2);
+        }
+
+        /* ── form fields stagger in after box reveals ── */
+        const fields = formInnerRef.current?.querySelectorAll('.form-field') || [];
+        const btns = formInnerRef.current?.querySelectorAll('.form-btn') || [];
+
+        if (fields.length) {
+            gsap.set(fields, { y: 50, opacity: 0 });
+            tl.to(fields, {
+                y: 0,
+                opacity: 1,
+                duration: 0.7,
+                stagger: 0.12,
+                ease: 'power3.out',
+            }, 0.6);
+        }
+
+        if (btns.length) {
+            gsap.set(btns, { y: 30, opacity: 0, scale: 0.92 });
+            tl.to(btns, {
+                y: 0,
+                opacity: 1,
+                scale: 1,
+                duration: 0.6,
+                stagger: 0.08,
+                ease: 'back.out(1.4)',
+            }, 1.2);
+        }
+    }, { scope: sectionRef });
 
     /* ── form logic ── */
     const validate = () => {
@@ -191,7 +147,7 @@ export default function Contact() {
 
     /* ── styles ── */
     const labelStyle = {
-        fontFamily: 'Thedus-wd',
+        fontFamily: 'Thedus-wl',
         fontWeight: 400,
         fontSize: 'clamp(12px, 1vw, 14px)',
         letterSpacing: '0.15em',
@@ -214,10 +170,10 @@ export default function Contact() {
         transition: 'border-color 0.3s ease',
     };
 
-    const errorInputStyle = { ...inputStyle, borderColor: '#D00000' };
+    const errorInputStyle = { ...inputStyle, borderColor: '#e03047' };
 
     const btnBase = {
-        fontFamily: 'Thedus-wd',
+        fontFamily: 'Thedus-wl',
         fontWeight: 400,
         fontSize: 'clamp(12px, 1vw, 14px)',
         letterSpacing: '0.15em',
@@ -242,8 +198,7 @@ export default function Contact() {
         <section
             id="contact-us"
             ref={sectionRef}
-            className="section-container relative w-full min-h-screen bg-[#0A0A0F] flex items-center justify-center overflow-hidden"
-            style={{ paddingTop: '90px' }}
+            className="section-container relative w-full h-screen bg-[#0A0A0F] flex items-center justify-center overflow-hidden"
         >
             <div className="w-full max-w-[1300px] grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-24 items-center">
 
@@ -293,12 +248,12 @@ export default function Contact() {
                                 onChange={handleChange}
                                 style={errors.name ? errorInputStyle : inputStyle}
                                 onFocus={e => e.target.style.borderColor = 'rgba(255, 255, 255, 0.5)'}
-                                onBlur={e => e.target.style.borderColor = errors.name ? '#D00000' : '#333333'}
+                                onBlur={e => e.target.style.borderColor = errors.name ? '#e03047' : '#333333'}
                                 disabled={status === 'sending'}
                                 autoComplete="name"
                             />
                             {errors.name && (
-                                <p style={{ color: '#D00000', fontSize: '12px', marginTop: '6px', fontFamily: 'Geist, sans-serif' }}>
+                                <p style={{ color: '#e03047', fontSize: '12px', marginTop: '6px', fontFamily: 'Geist, sans-serif' }}>
                                     {errors.name}
                                 </p>
                             )}
@@ -315,12 +270,12 @@ export default function Contact() {
                                 onChange={handleChange}
                                 style={errors.email ? errorInputStyle : inputStyle}
                                 onFocus={e => e.target.style.borderColor = 'rgba(255, 255, 255, 0.5)'}
-                                onBlur={e => e.target.style.borderColor = errors.email ? '#D00000' : '#333333'}
+                                onBlur={e => e.target.style.borderColor = errors.email ? '#e03047' : '#333333'}
                                 disabled={status === 'sending'}
                                 autoComplete="email"
                             />
                             {errors.email && (
-                                <p style={{ color: '#D00000', fontSize: '12px', marginTop: '6px', fontFamily: 'Geist, sans-serif' }}>
+                                <p style={{ color: '#e03047', fontSize: '12px', marginTop: '6px', fontFamily: 'Geist, sans-serif' }}>
                                     {errors.email}
                                 </p>
                             )}
@@ -337,11 +292,11 @@ export default function Contact() {
                                 rows={6}
                                 style={errors.message ? { ...errorInputStyle, resize: 'none' } : { ...inputStyle, resize: 'none' }}
                                 onFocus={e => e.target.style.borderColor = 'rgba(255, 255, 255, 0.5)'}
-                                onBlur={e => e.target.style.borderColor = errors.message ? '#D00000' : '#333333'}
+                                onBlur={e => e.target.style.borderColor = errors.message ? '#e03047' : '#333333'}
                                 disabled={status === 'sending'}
                             />
                             {errors.message && (
-                                <p style={{ color: '#D00000', fontSize: '12px', marginTop: '6px', fontFamily: 'Geist, sans-serif' }}>
+                                <p style={{ color: '#e03047', fontSize: '12px', marginTop: '6px', fontFamily: 'Geist, sans-serif' }}>
                                     {errors.message}
                                 </p>
                             )}
@@ -349,22 +304,21 @@ export default function Contact() {
 
                         {/* Status feedback */}
                         {status === 'sent' && (
-                            <p style={{ color: '#4ade80', fontSize: '13px', fontFamily: 'Thedus-cl', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+                            <p style={{ color: '#4ade80', fontSize: '13px', fontFamily: 'Thedus-wl', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
                                 Message sent successfully!
                             </p>
                         )}
                         {status === 'error' && (
-                            <p style={{ color: '#D00000', fontSize: '13px', fontFamily: 'Thedus-cl', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+                            <p style={{ color: '#e03047', fontSize: '13px', fontFamily: 'Thedus-wl', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
                                 {errors.submit || 'Failed to send. Please try again.'}
                             </p>
                         )}
 
-                        {/* BUTTONS */}
                         <div className="flex flex-wrap items-center gap-4 mt-4">
                             <button
                                 type="submit"
                                 className="form-btn group relative flex items-center gap-2 overflow-hidden"
-                                style={{ ...btnBase, backgroundColor: '#D00000', color: 'white', opacity: status === 'sending' ? 0.6 : 1 }}
+                                style={{ ...btnBase, backgroundColor: '#e03047', color: 'white', opacity: status === 'sending' ? 0.6 : 1 }}
                                 disabled={status === 'sending'}
                             >
                                 <div className="absolute inset-0 w-full h-full bg-[#111] translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)]" />
@@ -376,22 +330,13 @@ export default function Contact() {
 
                             <button
                                 type="button"
-                                onClick={() => { setForm({ name: '', email: '', message: '' }); setErrors({}); setStatus('idle'); }}
+                                onClick={() => router.back()}
                                 className="form-btn group relative flex items-center overflow-hidden"
                                 style={{ ...btnBase, backgroundColor: 'transparent', color: 'white', border: '1px solid rgba(255,255,255,0.2)' }}
                                 disabled={status === 'sending'}
                             >
                                 <div className="absolute inset-0 w-full h-full bg-white translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)]" />
                                 <span className="relative z-10 group-hover:text-black transition-colors duration-500">CLOSE</span>
-                            </button>
-
-                            <button
-                                type="button"
-                                className="form-btn group relative flex items-center overflow-hidden"
-                                style={{ ...btnBase, backgroundColor: 'transparent', color: 'white', border: '1px solid rgba(255,255,255,0.2)' }}
-                            >
-                                <div className="absolute inset-0 w-full h-full bg-white translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)]" />
-                                <span className="relative z-10 group-hover:text-black transition-colors duration-500">SCHEDULE A CALL</span>
                             </button>
                         </div>
                     </form>

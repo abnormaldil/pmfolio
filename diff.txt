@@ -1,0 +1,704 @@
+﻿diff --git a/src/components/web/CreativesGrid.jsx b/src/components/web/CreativesGrid.jsx
+index fe24089..d80f94b 100644
+--- a/src/components/web/CreativesGrid.jsx
++++ b/src/components/web/CreativesGrid.jsx
+@@ -1,310 +1,407 @@
+ 'use client';
+-import { useState, useRef } from 'react';
++import { useState, useRef, useCallback, useLayoutEffect } from 'react';
+ import { normalizeCategory } from '@/lib/mediaHelpers';
+ import CreativeDetail from './CreativeDetail';
+ import gsap from 'gsap';
+ import { ScrollTrigger } from 'gsap/ScrollTrigger';
+ import { useGSAP } from '@gsap/react';
+ 
+-if (typeof window !== "undefined") {
++if (typeof window !== 'undefined') {
+     gsap.registerPlugin(ScrollTrigger);
+ }
+ 
+-/** Category definitions with SVG icons */
+-const creativeCategories = [
+-    {
+-        key: 'video_editing',
+-        label: 'VIDEO\nEDITING',
+-        displayLabel: ['VIDEO', 'EDITING'],
+-        icon: (
+-            <svg width="110" height="110" viewBox="0 0 80 80" fill="none">
+-                <rect x="8" y="22" width="42" height="36" rx="6" fill="white" />
+-                <path d="M54 32L72 24V56L54 48V32Z" fill="white" />
+-            </svg>
+-        ),
+-    },
+-    {
+-        key: 'motion_gfx',
+-        label: 'MOTION\nGFX',
+-        displayLabel: ['MOTION', 'GFX'],
+-        icon: (
+-            <svg width="110" height="110" viewBox="0 0 80 80" fill="none">
+-                <circle cx="52" cy="16" r="6" stroke="white" strokeWidth="3" fill="none" />
+-                <path d="M48 24L36 36L24 32" stroke="white" strokeWidth="3" strokeLinecap="round" />
+-                <path d="M36 36L32 52L20 60" stroke="white" strokeWidth="3" strokeLinecap="round" />
+-                <path d="M36 36L48 48L56 60" stroke="white" strokeWidth="3" strokeLinecap="round" />
+-                <circle cx="14" cy="28" r="3" fill="white" />
+-                <circle cx="8" cy="44" r="3" fill="white" />
+-                <circle cx="18" cy="52" r="2" fill="white" />
+-            </svg>
+-        ),
+-    },
+-    {
+-        key: 'graphics',
+-        label: 'GRAPHICS',
+-        displayLabel: ['GRAPHICS'],
+-        icon: (
+-            <svg width="110" height="110" viewBox="0 0 80 80" fill="none">
+-                <rect x="44" y="10" width="12" height="36" rx="3" transform="rotate(35 44 10)" stroke="white" strokeWidth="3" fill="none" />
+-                <path d="M32 58L28 70L40 66Z" stroke="white" strokeWidth="2.5" fill="none" />
+-                <rect x="10" y="44" width="50" height="12" rx="3" stroke="white" strokeWidth="3" fill="none" />
+-                <path d="M20 44V50M30 44V50M40 44V50M50 44V50" stroke="white" strokeWidth="2" />
+-                <rect x="8" y="16" width="8" height="8" rx="2" fill="white" />
+-                <rect x="64" y="16" width="8" height="8" rx="2" fill="white" />
+-            </svg>
+-        ),
+-    },
+-    {
+-        key: 'ui_ux',
+-        label: 'UI/UX',
+-        displayLabel: ['UI/UX'],
+-        icon: (
+-            <svg width="110" height="110" viewBox="0 0 80 80" fill="none">
+-                <rect x="16" y="20" width="44" height="36" rx="2" stroke="white" strokeWidth="3" fill="none" strokeDasharray="4 2" />
+-                <rect x="10" y="14" width="10" height="10" rx="2" fill="white" />
+-                <rect x="60" y="14" width="10" height="10" rx="2" fill="white" />
+-                <rect x="10" y="56" width="10" height="10" rx="2" fill="white" />
+-                <rect x="60" y="56" width="10" height="10" rx="2" fill="white" />
+-                <path d="M50 46L58 70L62 58L74 54L50 46Z" fill="white" />
+-            </svg>
+-        ),
+-    },
+-];
++/**
++ * View states
++ * ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++ * 'grid'               ΓåÆ only the grid is visible
++ * 'animating-to-detail'ΓåÆ grid + overlay animating forward; detail pre-mounted
++ *                         but invisible (visibility:hidden) behind overlay
++ * 'detail'             ΓåÆ only the detail is visible; overlay hidden
++ * 'animating-to-grid'  ΓåÆ detail + overlay animating backward; grid pre-mounted
++ *                         but invisible behind overlay
++ *
++ * Key invariant: the overlay is ALWAYS visible on screen whenever we are
++ * transitioning.  Neither the grid nor the detail is ever left alone without
++ * the overlay covering any "gap" frame.
++ */
+ 
+ export default function CreativesGrid({ creativesData }) {
+-    const [selected, setSelected] = useState(null);
+-    const containerRef = useRef(null);
+-    const tlRef = useRef(null);
+-
+-    const selectedCategory = creativeCategories.find(c => c.key === selected);
+-    const filteredItems = selected ? creativesData.filter(item => normalizeCategory(item.category) === selected) : [];
+-
+-
+-
+-    const handleCardClick = (key) => {
+-        let currentScroll = window.scrollY;
++    const [viewState, setViewState] = useState('grid');
++    const [selectedKey, setSelectedKey] = useState(null);
+ 
+-        // 1. Get the current exact physical scroll position of the grid top
+-        if (containerRef.current) {
+-            const rect = containerRef.current.getBoundingClientRect();
+-            currentScroll = window.scrollY + rect.top;
+-        }
+-
+-        // 2. Kill the ScrollTrigger safely if it exists (removes pin spacer)
+-        if (tlRef.current && tlRef.current.scrollTrigger) {
+-            tlRef.current.scrollTrigger.kill(true); // true removes the pin-spacer
+-            tlRef.current.kill();
+-            tlRef.current = null;
+-        }
+-
+-        // 3. Force the window scroll to stay exactly where the section top was
+-        window.scrollTo({
+-            top: currentScroll,
+-            behavior: "instant"
+-        });
+-
+-        // 4. Update React State to unmount the grid and mount the details page.
+-        setSelected(key);
++    const containerRef = useRef(null);
+ 
+-        // 5. Force a refresh of all other ScrollTriggers and strictly enforce the scroll position again
+-        // just in case React's render cycle tried to shift anything.
+-        setTimeout(() => {
+-            window.scrollTo({
+-                top: currentScroll,
+-                behavior: "instant"
+-            });
+-            ScrollTrigger.refresh();
+-        }, 0);
+-    };;
+-
+-        const handleClose = () => {
+-            let targetScroll = 0;
+-
+-            // Get the current section top before the layout shifts
+-            if (containerRef.current) {
+-                const rect = containerRef.current.getBoundingClientRect();
+-                targetScroll = window.scrollY + rect.top;
+-            }
+-
+-            setSelected(null);
+-
+-            // Prevent scroll jump and re-initialize GSAP correctly when returning to the grid
+-            setTimeout(() => {
+-                window.scrollTo({ top: targetScroll, behavior: "instant" });
+-                ScrollTrigger.refresh();
+-            }, 50);
++    // Per-card element refs (keyed by card key)
++    const cardRedRefs = useRef({});
++    const cardIconRefs = useRef({});
++
++    // Overlay clone elements
++    const overlayRef = useRef(null);
++    const overlayRedRef = useRef(null);
++    const overlayIconRef = useRef(null);
++
++    // Snapshot of card rects taken at click time ΓÇö used for reverse animation
++    const sourceRectsRef = useRef({ redRect: null, iconRect: null });
++
++    // ΓöÇΓöÇΓöÇ helpers ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++
++    /** Returns the GSAP "detail" positions for the overlay clones. */
++    const getDetailPositions = useCallback(() => {
++        const vw = window.innerWidth;
++        const vh = window.innerHeight;
++        const iconSize = 300;
++        return {
++            red: {
++                left: 240,
++                top: 0,
++                width: vw - 240,
++                height: vh,
++                borderRadius: 0,
++            },
++            icon: {
++                left: (320 - iconSize) / 2,
++                top: (vh - iconSize) / 2,
++                width: iconSize,
++                height: iconSize,
++            },
+         };
+-
+-        // useGSAP(() => {
+-        //     if (!containerRef.current || selected) return;
+-
+-        //     // Small delay to let React finish rendering the grid DOM
+-        //     const ctx = gsap.context(() => {
+-        //         const scrollContainer = containerRef.current?.querySelector('.creatives-scroll-container');
+-        //         if (!scrollContainer) return;
+-
+-        //         const tl = gsap.timeline({
+-        //             scrollTrigger: {
+-        //                 trigger: scrollContainer,
+-        //                 start: "top 10%",
+-        //                 end: "+=200%",
+-        //                 pin: true,
+-        //                 scrub: 1,
+-        //             }
+-        //         });
+-
+-        //         tlRef.current = tl;
+-
+-        //         // Initialize positions
+-        //         gsap.set(".card-0", { left: "25%", top: "50%", yPercent: -50, xPercent: -50, opacity: 1, scale: 1 });
+-        //         gsap.set(".card-1", { left: "75%", top: "50%", yPercent: -50, xPercent: -50, opacity: 1, scale: 1 });
+-        //         gsap.set(".card-2", { left: "75%", top: "100%", yPercent: 20, xPercent: -50, opacity: 1, scale: 1 });
+-        //         gsap.set(".card-3", { left: "75%", top: "100%", yPercent: 120, xPercent: -50, opacity: 1, scale: 1 });
+-
+-        //         // Phase 1
+-        useGSAP(() => {
+-            if (!containerRef.current) return;
+-
+-            const ctx = gsap.context(() => {
+-                const scrollContainer = containerRef.current.querySelector('.creatives-scroll-container');
+-                const cardsWrapper = containerRef.current.querySelector('.cards-wrapper');
+-
+-                if (!scrollContainer || !cardsWrapper) return;
+-
+-                // Provide enough scroll space for the cards to move all the way left
+-                const getScrollAmount = () => {
+-                    let cardsWidth = cardsWrapper.scrollWidth;
+-                    return Math.max(0, cardsWidth - window.innerWidth + 200);
+-                };
+-
+-                const tl = gsap.timeline({
+-                    scrollTrigger: {
+-                        id: "creatives-grid",
+-                        trigger: scrollContainer,
+-                        start: "center center",
+-                        end: () => `+=${getScrollAmount()}`,
+-                        pin: true,
+-                        scrub: 1,
+-                        invalidateOnRefresh: true,
+-                    }
++    }, []);
++
++    // ΓöÇΓöÇΓöÇ open ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++
++    const handleCardClick = useCallback(
++        (key) => {
++            if (viewState !== 'grid') return;
++
++            const redEl = cardRedRefs.current[key];
++            const iconEl = cardIconRefs.current[key];
++            if (!redEl || !iconEl) return;
++
++            // 1. Snapshot source rects BEFORE any state change
++            const redRect = redEl.getBoundingClientRect();
++            const iconRect = iconEl.getBoundingClientRect();
++            sourceRectsRef.current = { redRect, iconRect };
++
++            // 2. Lock scroll
++            document.body.style.overflow = 'hidden';
++
++            // 3. Transition to 'animating-to-detail':
++            //    ΓÇó grid stays visible (showGrid = true)
++            //    ΓÇó detail mounts but is visibility:hidden behind overlay
++            //    ΓÇó overlay becomes visible
++            setSelectedKey(key);
++            setViewState('animating-to-detail');
++
++            // 4. After React commits the new render (grid + hidden-detail + overlay),
++            //    position overlay clones over the card and start the GSAP timeline.
++            //    We use requestAnimationFrame ├ù 2 so the browser has painted before
++            //    we read layout and start animating ΓÇö this is the most reliable way
++            //    to avoid a "flash before animation" on the first frame.
++            requestAnimationFrame(() => {
++                requestAnimationFrame(() => {
++                    const overlay = overlayRef.current;
++                    const overlayRed = overlayRedRef.current;
++                    const overlayIcon = overlayIconRef.current;
++                    if (!overlay || !overlayRed || !overlayIcon) return;
++
++                    // Show overlay
++                    gsap.set(overlay, { visibility: 'visible', pointerEvents: 'none' });
++
++                    // Position clones exactly over the card
++                    gsap.set(overlayRed, {
++                        position: 'fixed',
++                        left: redRect.left,
++                        top: redRect.top,
++                        width: redRect.width,
++                        height: redRect.height,
++                        borderRadius: '0.5rem',
++                        backgroundColor: '#e03047',
++                        force3D: true,
++                    });
++                    gsap.set(overlayIcon, {
++                        position: 'fixed',
++                        left: iconRect.left,
++                        top: iconRect.top,
++                        width: iconRect.width,
++                        height: iconRect.height,
++                        force3D: true,
++                    });
++
++                    const dest = getDetailPositions();
++
++                    gsap
++                        .timeline({
++                            onComplete: () => {
++                                // 5. Detail is already mounted behind overlay.
++                                //    Switch state to 'detail' ΓÇö this makes detail visible
++                                //    and hides the grid in the same React render.
++                                setViewState('detail');
++
++                                // 6. Hide overlay on the NEXT paint after React commits, so
++                                //    there is never a frame where both overlay AND page are
++                                //    invisible.
++                                requestAnimationFrame(() => {
++                                    gsap.set(overlay, { visibility: 'hidden' });
++                                    ScrollTrigger.refresh();
++                                });
++                            },
++                        })
++                        .to(
++                            overlayRed,
++                            {
++                                left: dest.red.left,
++                                top: dest.red.top,
++                                width: dest.red.width,
++                                height: dest.red.height,
++                                borderRadius: dest.red.borderRadius,
++                                duration: 0.75,
++                                ease: 'power3.inOut',
++                            },
++                            0,
++                        )
++                        .to(
++                            overlayIcon,
++                            {
++                                left: dest.icon.left,
++                                top: dest.icon.top,
++                                width: dest.icon.width,
++                                height: dest.icon.height,
++                                duration: 0.75,
++                                ease: 'power3.inOut',
++                            },
++                            0,
++                        );
+                 });
+-
+-                tlRef.current = tl;
+-
+-                tl.to(cardsWrapper, {
+-                    x: () => -getScrollAmount(),
+-                    ease: "none",
++            });
++        },
++        [viewState, getDetailPositions],
++    );
++
++    // ΓöÇΓöÇΓöÇ close ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++
++    const handleClose = useCallback(() => {
++        if (viewState !== 'detail') return;
++
++        const { redRect, iconRect } = sourceRectsRef.current;
++        const overlay = overlayRef.current;
++        const overlayRed = overlayRedRef.current;
++        const overlayIcon = overlayIconRef.current;
++        if (!overlay || !overlayRed || !overlayIcon) return;
++
++        // 1. Transition to 'animating-to-grid':
++        //    ΓÇó detail stays visible (showDetail = true)
++        //    ΓÇó grid mounts but is visibility:hidden behind overlay
++        //    ΓÇó overlay will become visible
++        setViewState('animating-to-grid');
++
++        // 2. After React commits, position clones at "detail" positions and
++        //    animate them back toward the card.
++        requestAnimationFrame(() => {
++            requestAnimationFrame(() => {
++                const src = getDetailPositions();
++
++                // Show overlay
++                gsap.set(overlay, { visibility: 'visible', pointerEvents: 'none' });
++
++                // Position clones at where the detail layout currently shows them
++                gsap.set(overlayRed, {
++                    position: 'fixed',
++                    left: src.red.left,
++                    top: src.red.top,
++                    width: src.red.width,
++                    height: src.red.height,
++                    borderRadius: 0,
++                    backgroundColor: '#e03047',
++                    force3D: true,
++                });
++                gsap.set(overlayIcon, {
++                    position: 'fixed',
++                    left: src.icon.left,
++                    top: src.icon.top,
++                    width: src.icon.width,
++                    height: src.icon.height,
++                    force3D: true,
+                 });
+ 
+-            }, containerRef);
+-
+-            return () => {
+-                ctx.revert();
+-                tlRef.current = null;
+-            };
+-
+-        }, { dependencies: [selected], scope: containerRef });
+-        return (
+-            <div className="w-full" ref={containerRef}>
+-                {selected && selectedCategory && (
+-                    <div className="w-full mb-10">
+-                        <CreativeDetail
+-                            categoryItem={selectedCategory}
+-                            items={filteredItems}
+-                            onClose={handleClose}
+-                        />
+-                    </div>
+-                )}
+-
+-                {!selected && (
+-                    <div className="creatives-scroll-container w-full h-[80vh] min-h-[600px] flex items-center overflow-hidden">
+-                        <div className="cards-wrapper flex gap-12 px-[10vw] w-max">
+-                            {creativeCategories.map((item, index) => {
+-                                const count = creativesData.filter(c => normalizeCategory(c.category) === item.key).length;
+-                                return (
+-                                    <div
+-                                        key={item.key}
+-                                        onClick={() => handleCardClick(item.key)}
+-                                        className={`card-${index} shrink-0 w-[280px] flex flex-col items-center group cursor-pointer`}
+-                                    >
+-                                        <div
+-                                            className="relative z-10 flex items-center justify-center rounded-full group-hover:scale-105 transition-transform duration-300"
+-                                            style={{
+-                                                width: '200px',
+-                                                height: '200px',
+-                                                background: 'radial-gradient(circle at 35% 35%, #4a4a4a, #1a1a1a)',
+-                                                boxShadow: '0 20px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1)',
+-                                                marginBottom: '-60px',
+-                                            }}
+-                                        >
+-                                            <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+-                                                {item.key === 'video_editing' && (
+-                                                    <>
+-                                                        <rect x="8" y="22" width="42" height="36" rx="6" fill="white" />
+-                                                        <path d="M54 32L72 24V56L54 48V32Z" fill="white" />
+-                                                    </>
+-                                                )}
+-                                                {item.key === 'motion_gfx' && (
+-                                                    <>
+-                                                        <circle cx="52" cy="16" r="6" stroke="white" strokeWidth="3" fill="none" />
+-                                                        <path d="M48 24L36 36L24 32" stroke="white" strokeWidth="3" strokeLinecap="round" />
+-                                                        <path d="M36 36L32 52L20 60" stroke="white" strokeWidth="3" strokeLinecap="round" />
+-                                                        <path d="M36 36L48 48L56 60" stroke="white" strokeWidth="3" strokeLinecap="round" />
+-                                                        <circle cx="14" cy="28" r="3" fill="white" />
+-                                                        <circle cx="8" cy="44" r="3" fill="white" />
+-                                                    </>
+-                                                )}
+-                                                {item.key === 'graphics' && (
+-                                                    <>
+-                                                        <rect x="44" y="10" width="12" height="36" rx="3" transform="rotate(35 44 10)" stroke="white" strokeWidth="3" fill="none" />
+-                                                        <path d="M32 58L28 70L40 66Z" stroke="white" strokeWidth="2.5" fill="none" />
+-                                                        <rect x="10" y="44" width="50" height="12" rx="3" stroke="white" strokeWidth="3" fill="none" />
+-                                                        <path d="M20 44V50M30 44V50M40 44V50M50 44V50" stroke="white" strokeWidth="2" />
+-                                                    </>
+-                                                )}
+-                                                {item.key === 'ui_ux' && (
+-                                                    <>
+-                                                        <rect x="16" y="20" width="44" height="36" rx="2" stroke="white" strokeWidth="3" fill="none" strokeDasharray="4 2" />
+-                                                        <rect x="10" y="14" width="10" height="10" rx="2" fill="white" />
+-                                                        <rect x="60" y="14" width="10" height="10" rx="2" fill="white" />
+-                                                        <rect x="10" y="56" width="10" height="10" rx="2" fill="white" />
+-                                                        <rect x="60" y="56" width="10" height="10" rx="2" fill="white" />
+-                                                        <path d="M50 46L58 70L62 58L74 54L50 46Z" fill="white" />
+-                                                    </>
+-                                                )}
+-                                            </svg>
+-                                        </div>
+-
+-                                        <div
+-                                            className="w-full flex items-end pb-7 pl-7 rounded-sm"
+-                                            style={{ backgroundColor: '#D00000', paddingTop: '80px', minHeight: '280px' }}
+-                                        >
+-                                            <div>
+-                                                <p
+-                                                    className="uppercase text-white leading-tight whitespace-pre-line"
+-                                                    style={{
+-                                                        fontFamily: 'Thedus, sans-serif',
+-                                                        fontWeight: 700,
+-                                                        fontSize: 'clamp(18px, 2vw, 26px)',
+-                                                        letterSpacing: '0.05em',
+-                                                    }}
+-                                                >
+-                                                    {item.label}
+-                                                </p>
+-                                                {count > 0 && (
+-                                                    <p className="text-white/60 mt-2 text-xs uppercase tracking-[0.15em]"
+-                                                        style={{ fontFamily: 'Thedus-cl' }}>
+-                                                        {count} {count === 1 ? 'project' : 'projects'}
+-                                                    </p>
+-                                                )}
+-                                            </div>
+-                                        </div>
+-                                    </div>
+-                                );
+-                            })}
+-                        </div>
+-                    </div>
+-                )}
++                gsap
++                    .timeline({
++                        onComplete: () => {
++                            // 3. Switch to 'grid' ΓÇö grid becomes visible, detail unmounts.
++                            setViewState('grid');
++                            setSelectedKey(null);
++
++                            // 4. Hide overlay on next paint so the grid is already rendered
++                            //    before the overlay disappears.
++                            requestAnimationFrame(() => {
++                                gsap.set(overlay, { visibility: 'hidden' });
++                                document.body.style.overflow = '';
++                                ScrollTrigger.refresh();
++                            });
++                        },
++                    })
++                    .to(
++                        overlayRed,
++                        {
++                            left: redRect.left,
++                            top: redRect.top,
++                            width: redRect.width,
++                            height: redRect.height,
++                            borderRadius: '0.5rem',
++                            duration: 0.7,
++                            ease: 'power3.inOut',
++                        },
++                        0,
++                    )
++                    .to(
++                        overlayIcon,
++                        {
++                            left: iconRect.left,
++                            top: iconRect.top,
++                            width: iconRect.width,
++                            height: iconRect.height,
++                            duration: 0.7,
++                            ease: 'power3.inOut',
++                        },
++                        0,
++                    );
++            });
++        });
++    }, [viewState, getDetailPositions]);
++
++  // ΓöÇΓöÇΓöÇ derived visibility ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++
++    
++    //     Grid is rendered(but maybe invisible) whenever we might need to animate
++    //  back to it, or when it IS the active view.
++
++    const gridInDOM =
++        viewState === 'grid' ||
++        viewState === 'animating-to-detail' ||
++        viewState === 'animating-to-grid';
++
++    // *
++    //     Grid is truly visible only when it's the active view OR when we are
++    //  animating toward it(so it's ready behind the overlay).
++    //  During 'animating-to-detail' it sits behind the overlay ΓÇö keep it painted
++    //  but don't hide it (overlay covers it anyway), because hiding it would
++    //  cause layout shifts that break the snapshot rects.
++
++    const gridVisible =
++        viewState === 'grid' ||
++        viewState === 'animating-to-detail' ||
++        viewState === 'animating-to-grid';
++
++    // *
++    //     Detail is rendered whenever we might need to show it.
++    //         During 'animating-to-detail' it is pre - mounted but invisible so it is
++    //  ready the instant the overlay hides.
++
++    const detailInDOM =
++        viewState === 'detail' ||
++        viewState === 'animating-to-detail' ||
++        viewState === 'animating-to-grid';
++
++    // *
++    //     Detail is truly visible only when it IS the active view OR when we are
++    //  animating away from it(overlay covers it in both cases).
++
++    const detailVisible =
++        viewState === 'detail' || viewState === 'animating-to-grid';
++
++    // ΓöÇΓöÇΓöÇ render ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++
++    return (
++        <div className="w-full" ref={containerRef}>
++
++            {/* ΓöÇΓöÇ GRID ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ */}
++            {gridInDOM && (
++                <div
++                    className="creatives-scroll-container"
++                    style={{
++                        // Use visibility so the grid stays in the paint tree (preserving
++                        // scroll position and element rects) even when "hidden".
++                        visibility: gridVisible ? 'visible' : 'hidden',
++                        // Keep it out of the stacking context during detail so it doesn't
++                        // bleed through, but don't use display:none (kills layout).
++                        pointerEvents: viewState === 'grid' ? 'auto' : 'none',
++                    }}
++                >
++                    {/* YOUR ORIGINAL CARD GRID CODE HERE */}
++                    {/* Example card ΓÇö replace with your real card rendering */}
++                    {creativesData?.map((creative) => {
++                        const key = creative.id ?? creative.slug;
++                        return (
++                            <div
++                                key={key}
++                                className="creative-card"
++                                onClick={() => handleCardClick(key)}
++                            >
++                                {/* Icon ΓÇö ref captured per card */}
++                                <div
++                                    ref={(el) => {
++                                        if (el) cardIconRefs.current[key] = el;
++                                        else delete cardIconRefs.current[key];
++                                    }}
++                                    className="card-icon"
++                                />
++
++                                {/* Red container ΓÇö ref captured per card */}
++                                <div
++                                    ref={(el) => {
++                                        if (el) cardRedRefs.current[key] = el;
++                                        else delete cardRedRefs.current[key];
++                                    }}
++                                    className="card-red"
++                                />
++                            </div>
++                        );
++                    })}
++                </div>
++            )}
++
++            {/* ΓöÇΓöÇ DETAIL ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ */}
++            {detailInDOM && (
++                <div
++                    style={{
++                        // Same trick: visibility keeps the component painted and ready
++                        // so there is no "pop-in" frame when the overlay hides.
++                        visibility: detailVisible ? 'visible' : 'hidden',
++                        pointerEvents: viewState === 'detail' ? 'auto' : 'none',
++                        // Sit below the overlay (zIndex 9997) but above the grid
++                        position: detailVisible ? 'relative' : 'fixed',
++                        inset: detailVisible ? 'auto' : 0,
++                        zIndex: detailVisible ? 'auto' : 1,
++                    }}
++                >
++                    <CreativeDetail
++                        key={selectedKey}   // remount when a different card is selected
++                        onClose={handleClose}
++                    />
++                </div>
++            )}
++
++            {/* ΓöÇΓöÇ OVERLAY TRANSITION LAYER ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ */}
++            {/*
++        Always in the DOM so refs are never null when GSAP tries to read them.
++        Starts hidden; GSAP makes it visible only during transitions.
++      */}
++            <div
++                ref={overlayRef}
++                style={{
++                    position: 'fixed',
++                    inset: 0,
++                    zIndex: 9997,
++                    visibility: 'hidden',
++                    pointerEvents: 'none',
++                }}
++            >
++                {/* Clone of the card's red container */}
++                <div ref={overlayRedRef} style={{ position: 'fixed' }} />
++
++                {/* Clone of the card's circular icon */}
++                <div ref={overlayIconRef} style={{ position: 'fixed' }} />
+             </div>
+-        );
+-    }
++
++        </div>
++    );
++}
+\ No newline at end of file

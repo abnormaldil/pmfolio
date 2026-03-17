@@ -1,7 +1,10 @@
 import { Geist, Geist_Mono, Anton } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "../components/SmoothScroll";
+
+export const dynamic = "force-dynamic";
 import Preloader from "../components/Preloader";
+import TargetCursor from "../components/TargetCursor";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,8 +25,8 @@ const anton = Anton({
   display: "swap",
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://pixelated.agency";
-const siteName = "Pixelated";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://pixelatedmedia.in";
+const siteName = "Pixelated Media";
 const siteDescription =
   "We don't just deliver files. We build digital assets that turn visitors into customers with design that actually works. Trusted by 100+ brands.";
 
@@ -42,6 +45,11 @@ export const metadata = {
     "brand design",
     "creative agency",
     "freelance designers",
+    "freelance designer",
+    "digital design agency",
+    "digital design agency in India",
+    "best digital design agency in India",
+    "best Freelnce designer"
   ],
   authors: [{ name: siteName }],
   creator: siteName,
@@ -99,9 +107,9 @@ const jsonLd = {
   url: siteUrl,
   logo: `${siteUrl}/logo-white.png`,
   sameAs: [
-    "https://twitter.com/pixelated",
-    "https://instagram.com/pixelated",
-    "https://linkedin.com/company/pixelated",
+    
+    "https://instagram.com/pixelatedmedia",
+    // "https://linkedin.com/company/pixelated",
   ],
   contactPoint: {
     "@type": "ContactPoint",
@@ -146,6 +154,13 @@ export default function RootLayout({ children }) {
         </svg>
         <Preloader />
         <SmoothScroll />
+        <TargetCursor
+          spinDuration={2}
+          hideDefaultCursor
+          parallaxOn
+          hoverDuration={0.2}
+          targetSelector="button, a, [role='button'], [data-cursor]"
+        />
         {children}
       </body>
     </html>

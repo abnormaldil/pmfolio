@@ -4,9 +4,9 @@ import { useState } from 'react';
 import clsx from 'clsx';
 
 export default function WhatWeCraft() {
-    const [selectedCategory, setSelectedCategory] = useState('WEBSITES');
+    const [selectedCategory, setSelectedCategory] = useState(null);
 
-    const categories = ['WEBSITES', 'VIDEOS', 'GRAPHICS', 'UI/UX', 'MOTION GFX'];
+    const categories = ['WEBSITES', 'VIDEOS', 'GRAPHICS', 'MOTION GFX', 'UI/UX'];
 
     const categoryMap = {
         'WEBSITES': ['nakul', 'kiran'],
@@ -19,7 +19,10 @@ export default function WhatWeCraft() {
     return (
         <section id="services" className="relative w-full bg-black flex flex-col items-center overflow-hidden
             pb-12 md:pb-20 lg:pb-24"
-            style={{ paddingTop: 'calc(90px + clamp(30px, 5vh, 70px))' }}
+            style={{
+                paddingTop: 'calc(90px + clamp(10px, 5vh, 75px))',
+
+            }}
         >
 
             {/* ── HEADLINE ── */}
@@ -27,7 +30,8 @@ export default function WhatWeCraft() {
                 className="uppercase text-white text-center leading-[0.85] tracking-[-0.02em] mb-12 px-4"
                 style={{
                     fontFamily: 'Humane-rg',
-                    fontSize: 'clamp(60px, 8vw, 150px)',
+                    fontSize: 'clamp(70px, 8vw, 150px)',
+
                 }}
             >
                 WHAT WE CRAFT FOR BRANDS THAT WANT TO STAND OUT
@@ -36,6 +40,7 @@ export default function WhatWeCraft() {
             {/* ── CATEGORY BUTTONS — z-index ensures clickable above images ── */}
             <div
                 className="flex flex-wrap justify-center gap-3 px-4 w-full max-w-[1440px]"
+                onMouseLeave={() => setSelectedCategory(null)}
                 style={{ position: 'relative', zIndex: 20, marginBottom: '0' }}
             >
                 {categories.map((cat) => (
@@ -44,14 +49,14 @@ export default function WhatWeCraft() {
                         onClick={() => setSelectedCategory(cat)}
                         onMouseEnter={() => setSelectedCategory(cat)}
                         className={clsx(
-                            "border min-w-[245px] py-18 transition-colors cursor-pointer outline-none",
+                            "border min-w-[140px] md:min-w-[245px] py-4 md:py-17 transition-colors cursor-pointer outline-none",
                             selectedCategory === cat
                                 ? "bg-white text-black border-white"
                                 : "bg-black text-white border-[#333] hover:bg-[#111]"
                         )}
                         style={{
-                            fontFamily: 'Thedus-wd',
-                            fontSize: 'clamp(14px, 1vw, 18px)',
+                            fontFamily: 'Thedus-wl',
+                            fontSize: 'clamp(30px, 1vw, 18px)',
                             letterSpacing: '0.1em',
                             position: 'relative',
                             zIndex: 20,
@@ -63,7 +68,7 @@ export default function WhatWeCraft() {
             </div>
 
             {/* ── TEAM IMAGES ── */}
-            <div className="w-full flex justify-center items-end mt-4 md:mt-12 flex-1">
+            <div className="w-full flex justify-center items-end mt-[-20px] md:mt-12 flex-1">
                 <div className="relative w-full max-w-[1440px] h-full flex items-end justify-center px-4 gap-4">
                     {['nakul', 'kiran', 'kk', 'dilu'].map((person) => {
                         const isActive = categoryMap[selectedCategory]?.includes(person);
@@ -71,7 +76,7 @@ export default function WhatWeCraft() {
                         return (
                             <div
                                 key={person}
-                                className="flex-1 relative h-[60vh] md:h-[70vh] group overflow-hidden flex items-end justify-center"
+                                className="flex-1 relative h-[40vh] md:h-[70vh] group overflow-hidden flex items-end justify-center"
                                 style={{
                                     transform: isActive ? 'scale(1.15) translateY(-12px)' : 'scale(1) translateY(0px)',
                                     transition: 'transform 0.9s cubic-bezier(0.34, 1.56, 0.64, 1)',

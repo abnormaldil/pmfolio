@@ -4,7 +4,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger);
+    gsap.registerPlugin(ScrollTrigger);
 }
 
 export default function useLenis() {
@@ -24,6 +24,7 @@ export default function useLenis() {
         });
 
         lenisRef.current = lenis;
+        window.lenis = lenis;
 
         // Integrate Lenis with GSAP ScrollTrigger
         lenis.on('scroll', ScrollTrigger.update);

@@ -15,6 +15,9 @@ export default function Preloader() {
                 setLoading(false);
                 document.body.style.overflow = '';
                 document.body.style.cursor = 'default';
+                // Notify other components that loading is done
+                window.dispatchEvent(new Event('finishLoading'));
+                window.preloaderFinished = true; // Fallback check
             }
         });
 
@@ -97,7 +100,7 @@ export default function Preloader() {
 
     if (!loading) return null;
 
-    const agencyName = 'PIXELATED';
+    const agencyName = 'PIXELATED MEDIA';
 
     return (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden pointer-events-none">
@@ -147,12 +150,12 @@ export default function Preloader() {
                 <p
                     className="preloader-tagline uppercase text-white/50 mb-8 opacity-0"
                     style={{
-                        fontFamily: 'Thedus-cl',
+                        fontFamily: 'Thedus-wl',
                         fontSize: 'clamp(10px, 0.9vw, 13px)',
                         letterSpacing: '0.3em',
                     }}
                 >
-                    FREELANCE AGENCY
+                    
                 </p>
 
                 {/* Loading Bar */}

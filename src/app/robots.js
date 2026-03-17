@@ -1,4 +1,4 @@
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://pixelated.agency';
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://pixelatedmedia.in';
 
 export default function robots() {
     return {

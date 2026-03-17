@@ -3,11 +3,13 @@ import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import WebsitesStack from './web/WebsitesStack';
 import CreativesGrid from './web/CreativesGrid';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-/**
- * Portfolio section — tab switcher between WEBSITES and CREATIVES.
- * All heavy logic lives in child components.
- */
+if (typeof window !== "undefined") {
+    gsap.registerPlugin(ScrollTrigger);
+}
+
 export default function Portfolio({ websitesData = [], creativesData = [] }) {
     const [activeTab, setActiveTab] = useState('WEBSITES');
     const sectionRef = useRef(null);
@@ -29,16 +31,18 @@ export default function Portfolio({ websitesData = [], creativesData = [] }) {
             className="section-container relative w-full bg-white flex flex-col items-center min-h-screen"
             style={{ paddingTop: 'calc(90px + clamp(30px, 5vh, 60px))' }}
         >
+
             {/* Headline */}
             <h2
-                className="text-center leading-none tracking-[-0.02em] mb-16 uppercase sticky top-[90px] z-[40] bg-white w-full py-4"
+                className="text-center leading-none tracking-[-0.02em] mb-16 uppercase w-full py-4 relative"
                 style={{
-                    fontFamily: 'Thedus-cl',
-                    fontWeight: 700,
-                    fontSize: 'clamp(48px, 7vw, 100px)',
+                    fontFamily: 'Humane-rg',
+                    fontWeight: 400,
+                    letterSpacing: '0.015em',
+                    fontSize: 'clamp(50px, 7vw, 100px)',
                 }}
             >
-                <span style={{ color: '#D00000' }}>
+                <span style={{ color: '#e03047' }}>
                     <AnimatePresence mode="wait">
                         <motion.span
                             key={activeTab}
@@ -56,7 +60,7 @@ export default function Portfolio({ websitesData = [], creativesData = [] }) {
             </h2>
 
             {/* Content */}
-            <div className="w-full max-w-[1200px] px-8 min-h-[600px] relative">
+            <div className={`w-full min-h-[600px] relative transition-all duration-500 ease-in-out ${activeTab === 'WEBSITES' ? 'max-w-[1200px] px-8' : ''}`}>
                 <AnimatePresence mode="wait">
                     <motion.div
                         key={activeTab}
@@ -65,6 +69,9 @@ export default function Portfolio({ websitesData = [], creativesData = [] }) {
                         exit={{ opacity: 0, y: -30 }}
                         transition={{ duration: 0.4, ease: 'easeInOut' }}
                         className="w-full"
+                        onAnimationComplete={() => {
+                            ScrollTrigger.refresh();
+                        }}
                     >
                         {activeTab === 'WEBSITES' ? (
                             <WebsitesStack websites={websitesData} />
@@ -78,38 +85,84 @@ export default function Portfolio({ websitesData = [], creativesData = [] }) {
             {/* Tab Switcher */}
             <div
                 className="flex sticky bottom-8 mt-16 shadow-2xl"
-                style={{ border: '1.5px solid #d4d4d4', zIndex: 50, marginTop: '26px' }}
+                style={{ border: '1.5px solid #d4d4d4', zIndex: 10, marginTop: '26px' }}
             >
+
+                {/* WEBSITES */}
                 <button
                     onClick={() => handleTabChange('WEBSITES')}
-                    className="px-16 py-4 uppercase transition-all duration-300 relative overflow-hidden"
+                    className="group relative overflow-hidden px-12 py-4 lg:px-28 lg:py-7 uppercase border-r border-neutral-300"
                     style={{
-                        fontFamily: 'Thedus-c',
-                        fontWeight: 700,
-                        fontSize: 'clamp(18px, 2vw, 26px)',
-                        letterSpacing: '0.2em',
-                        backgroundColor: activeTab === 'WEBSITES' ? '#D00000' : 'white',
-                        color: activeTab === 'WEBSITES' ? 'white' : '#D00000',
-                        borderRight: '1.5px solid #d4d4d4',
+                        fontFamily: 'Thedus-wl',
+                        fontWeight: 500,
+                        fontSize: 'clamp(20px, 2.5vw, 32px)',
+                        letterSpacing: '0.05em',
+
+                        padding: '10 30px'
                     }}
                 >
-                    WEBSITES
+
+                    {/* base layer */}
+                    <div
+                        className={`absolute inset-0 transition-colors duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] ${activeTab === 'WEBSITES' ? 'bg-[#e03047]' : 'bg-white'
+                            }`}
+                    />
+
+                    {/* sliding door (slides up from bottom) */}
+                    <div
+                        className={`absolute inset-0 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] ${activeTab === 'WEBSITES' ? 'bg-white' : 'bg-[#e03047]'
+                            }`}
+                    />
+
+                    <span
+                        className={`relative z-10 transition-colors duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] ${activeTab === 'WEBSITES'
+                            ? 'text-white group-hover:text-[#e03047]'
+                            : 'text-[#e03047] group-hover:text-white'
+                            }`}
+                    >
+                        WEBSITES
+                    </span>
+
                 </button>
+
+                {/* CREATIVES */}
                 <button
                     onClick={() => handleTabChange('CREATIVES')}
-                    className="px-16 py-4 uppercase transition-all duration-300 relative overflow-hidden"
+                    className="group relative overflow-hidden px-12 py-4 lg:px-28 lg:py-7 uppercase"
                     style={{
-                        fontFamily: 'Thedus-c',
-                        fontWeight: 700,
-                        fontSize: 'clamp(18px, 2vw, 26px)',
-                        letterSpacing: '0.2em',
-                        backgroundColor: activeTab === 'CREATIVES' ? '#D00000' : 'white',
-                        color: activeTab === 'CREATIVES' ? 'white' : '#D00000',
+                        fontFamily: 'Thedus-wl',
+                        fontWeight: 500,
+                        fontSize: 'clamp(20px, 2.5vw, 32px)',
+                        letterSpacing: '0.05em',
+                         padding: '10 30px'
                     }}
                 >
-                    CREATIVES
+
+                    {/* base layer */}
+                    <div
+                        className={`absolute inset-0 transition-colors duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] ${activeTab === 'CREATIVES' ? 'bg-[#e03047]' : 'bg-white'
+                            }`}
+                    />
+
+                    {/* sliding door (slides down from top) */}
+                    <div
+                        className={`absolute inset-0 -translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] ${activeTab === 'CREATIVES' ? 'bg-white' : 'bg-[#e03047]'
+                            }`}
+                    />
+
+                    <span
+                        className={`relative z-10 transition-colors duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] ${activeTab === 'CREATIVES'
+                            ? 'text-white group-hover:text-[#e03047]'
+                            : 'text-[#e03047] group-hover:text-white'
+                            }`}
+                    >
+                        CREATIVES
+                    </span>
+
                 </button>
+
             </div>
+
         </section>
     );
 }

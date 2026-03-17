@@ -1,11 +1,49 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { useGSAP } from '@gsap/react';
+import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { cleanUrl, isEmbedUrl, getYouTubeThumbnail } from '@/lib/mediaHelpers';
 import CreativeProjectModal from './CreativeProjectModal';
 
-export default function CreativeDetail({ categoryItem, items, onClose }) {
+export default function CreativeDetail({ categoryItem, items, onClose, detailRedRef, detailIconRef }) {
     const [selectedProject, setSelectedProject] = useState(null);
+    const containerRef = useRef(null);
+
+    // useGSAP(() => {
+    //     const cards = gsap.utils.toArray('.project-card');
+    //     if (cards.length > 0) {
+    //         gsap.fromTo(cards,
+    //             { y: 80, opacity: 0 },
+    //             {
+    //                 y: 0,
+    //                 opacity: 1,
+    //                 duration: 0.8,
+    //                 stagger: 0.2,
+    //                 ease: 'power3.out',
+    //                 delay: 0.2,
+    //                 overwrite: 'auto'
+    //             }
+    //         );
+    //     }
+    // }, { scope: containerRef, dependencies: [items] });
+    useGSAP(() => {
+
+    const q = gsap.utils.selector(containerRef);
+    const cards = q('.project-card');
+
+    const tl = gsap.timeline();
+
+    tl.from(cards, {
+        y: 80,
+        opacity: 0,
+        duration: 0.8,
+        stagger: 0.18,
+        delay: 0.5,
+        ease: "power3.out"
+    });
+
+}, { scope: containerRef });
 
     useEffect(() => {
         // Delay refresh slightly to ensure DOM layout has fully settled (pin spacers removed, etc)
@@ -16,11 +54,25 @@ export default function CreativeDetail({ categoryItem, items, onClose }) {
     }, []);
 
     return (
-        <div className="w-full flex" style={{ minHeight: '80vh', position: 'relative' }}>
+        <div
+            ref={containerRef}
+            className="w-full creative-detail-wrapper"
+            data-lenis-prevent="true"
+            style={{
+                display: 'flex',
+                flexDirection: 'row',
+                position: 'fixed',
+                inset: 0,
+                zIndex: 100,
+                backgroundColor: '#ffffff',
+                overflowY: 'auto',
+                overflowX: 'hidden'
+            }}
+        >
             <button
                 onClick={onClose}
-                className="absolute flex items-center justify-center border border-black/20 hover:bg-black/5 transition-colors"
-                style={{ top: 0, left: 0, width: '56px', height: '56px', zIndex: 10, background: 'white' }}
+                className="fixed flex items-center justify-center border border-black/20 hover:bg-black/5 transition-colors"
+                style={{ top: 0, left: 0, width: '56px', height: '56px', zIndex: 110, background: 'white' }}
                 aria-label="Close"
             >
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -29,11 +81,18 @@ export default function CreativeDetail({ categoryItem, items, onClose }) {
             </button>
 
             <div
-                className="flex-shrink-0 flex items-center justify-center"
-                style={{ width: '320px', zIndex: 5, marginRight: '-80px' }}
+                ref={detailIconRef}
+                className="flex-shrink-0 flex items-center justify-center relative z-10 creative-detail-icon-wrap"
+                style={{
+                    width: '320px',
+                    zIndex: 5,
+                    marginRight: '-80px',
+                    padding: '0px',
+                    backgroundColor: 'transparent'
+                }}
             >
                 <div
-                    className="flex items-center justify-center rounded-full"
+                    className="flex items-center justify-center rounded-full creative-detail-icon-circle"
                     style={{
                         width: '300px',
                         height: '300px',
@@ -46,16 +105,27 @@ export default function CreativeDetail({ categoryItem, items, onClose }) {
             </div>
 
             <div
-                className="flex-1 flex flex-col justify-start"
-                style={{ backgroundColor: '#D00000', padding: '60px 60px 60px 120px' }}
+                ref={detailRedRef}
+                className="flex-1 flex flex-col justify-start creative-detail-red-wrap"
+                style={{
+                    backgroundColor: '#e03047',
+                    paddingTop: '50px',
+                    paddingRight: '60px',
+                    paddingBottom: '60px',
+                    paddingLeft: '120px',
+                    minHeight: '100vh',
+                    height: 'max-content'
+                }}
             >
                 <h3
-                    className="uppercase text-white leading-none mb-12"
+                    className="uppercase text-white leading-none creative-detail-title"
                     style={{
-                        fontFamily: 'Thedus, sans-serif',
-                        fontWeight: 700,
+                        fontFamily: 'Thedus-wl',
+                        fontWeight: 300,
                         fontSize: 'clamp(40px, 5vw, 70px)',
                         letterSpacing: '0.05em',
+                        marginBottom: '48px',
+                        paddingBottom: '25px'
                     }}
                 >
                     {categoryItem.displayLabel.map((line, i) => (
@@ -64,7 +134,15 @@ export default function CreativeDetail({ categoryItem, items, onClose }) {
                 </h3>
 
                 {items.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pr-8">
+                    <div
+                        className="creative-detail-grid"
+                        style={{
+                            display: 'grid',
+                            gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
+                            gap: '32px',
+                            paddingRight: '32px'
+                        }}
+                    >
                         {items.map((item) => {
                             const imageUrl = cleanUrl(item.images);
                             const videoUrl = cleanUrl(item.videos);
@@ -75,11 +153,11 @@ export default function CreativeDetail({ categoryItem, items, onClose }) {
                                 <div
                                     key={item.id}
                                     onClick={() => setSelectedProject(item)}
-                                    className="flex flex-col gap-3 cursor-pointer group"
+                                    className="project-card flex flex-col gap-3 cursor-pointer group"
                                 >
                                     <div
                                         className="rounded-xl overflow-hidden relative transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)]"
-                                        style={{ aspectRatio: '16/10', backgroundColor: '#111', border: '1px solid rgba(255,255,255,0.1)' }}
+                                        style={{ aspectRatio: '3/4', backgroundColor: '#111', border: '1px solid rgba(255,255,255,0.1)' }}
                                     >
                                         <div className="w-full h-full transform transition-transform duration-700 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:scale-105">
                                             {thumbUrl ? (
@@ -104,7 +182,7 @@ export default function CreativeDetail({ categoryItem, items, onClose }) {
                                             </div>
                                         </div>
                                     </div>
-                                    <p className="text-white uppercase tracking-[0.15em] text-xs font-semibold pl-1 transition-colors duration-300 group-hover:text-white/80" style={{ fontFamily: 'Thedus-cl' }}>
+                                    <p className="text-white uppercase tracking-[0.15em] text-xs font-semibold pl-1 transition-colors duration-300 group-hover:text-white/80" style={{ fontFamily: 'Thedus-wl' }}>
                                         {item.Title}
                                     </p>
                                 </div>
@@ -112,7 +190,7 @@ export default function CreativeDetail({ categoryItem, items, onClose }) {
                         })}
                     </div>
                 ) : (
-                    <p className="text-white/50 uppercase tracking-[0.2em] text-sm" style={{ fontFamily: 'Thedus-cl' }}>
+                    <p className="text-white/50 uppercase tracking-[0.2em] text-sm" style={{ fontFamily: 'Thedus-wl' }}>
                         No projects added yet
                     </p>
                 )}

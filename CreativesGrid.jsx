@@ -127,48 +127,7 @@ export default function CreativesGrid({ creativesData }) {
         }, 50);
     };
 
-    // useGSAP(() => {
-    //     if (!containerRef.current || selected) return;
 
-    //     // Small delay to let React finish rendering the grid DOM
-    //     const ctx = gsap.context(() => {
-    //         const scrollContainer = containerRef.current?.querySelector('.creatives-scroll-container');
-    //         if (!scrollContainer) return;
-
-    //         const tl = gsap.timeline({
-    //             scrollTrigger: {
-    //                 trigger: scrollContainer,
-    //                 start: "top 10%",
-    //                 end: "+=200%",
-    //                 pin: true,
-    //                 scrub: 1,
-    //             }
-    //         });
-
-    //         tlRef.current = tl;
-
-    //         // Initialize positions
-    //         gsap.set(".card-0", { left: "25%", top: "50%", yPercent: -50, xPercent: -50, opacity: 1, scale: 1 });
-    //         gsap.set(".card-1", { left: "75%", top: "50%", yPercent: -50, xPercent: -50, opacity: 1, scale: 1 });
-    //         gsap.set(".card-2", { left: "75%", top: "100%", yPercent: 20, xPercent: -50, opacity: 1, scale: 1 });
-    //         gsap.set(".card-3", { left: "75%", top: "100%", yPercent: 120, xPercent: -50, opacity: 1, scale: 1 });
-
-    //         // Phase 1
-    //         tl.to(".card-0", { opacity: 0, scale: 0.8, xPercent: -150, duration: 1 })
-    //             .to(".card-1", { left: "25%", duration: 1 }, "<")
-    //             .to(".card-2", { top: "50%", yPercent: -50, duration: 1 }, "<");
-
-    //         // Phase 2
-    //         tl.to(".card-1", { opacity: 0, scale: 0.8, xPercent: -150, duration: 1 })
-    //             .to(".card-2", { left: "25%", duration: 1 }, "<")
-    //             .to(".card-3", { top: "50%", yPercent: -50, duration: 1 }, "<");
-    //     }, containerRef);
-
-    //     return () => {
-    //         ctx.revert();
-    //         tlRef.current = null;
-    //     };
-    // }, { dependencies: [selected], scope: containerRef });
 
     useGSAP(() => {
         if (!containerRef.current) return;
@@ -235,7 +194,8 @@ export default function CreativesGrid({ creativesData }) {
             )}
 
             {!selected && (
-                <div className="creatives-scroll-container w-full h-[80vh] min-h-[600px] relative overflow-hidden">
+                // <div className="creatives-scroll-container w-full h-[80vh] min-h-[600px] relative overflow-hidden">
+                <div className="creatives-scroll-container w-full h-[80vh] min-h-[600px] relative">
                     {creativeCategories.map((item, index) => {
                         const count = creativesData.filter(c => normalizeCategory(c.category) === item.key).length;
                         return (
@@ -294,7 +254,7 @@ export default function CreativesGrid({ creativesData }) {
 
                                 <div
                                     className="w-full flex items-end pb-7 pl-7 rounded-sm"
-                                    style={{ backgroundColor: '#D00000', paddingTop: '80px', minHeight: '280px' }}
+                                    style={{ backgroundColor: '#e03047', paddingTop: '80px', minHeight: '280px' }}
                                 >
                                     <div>
                                         <p

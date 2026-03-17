@@ -24,12 +24,12 @@ export default function MediaCarousel({ slides }) {
 
     return (
         <div
-            className="mx-8 mb-8 rounded-xl overflow-hidden relative"
-            style={{ minHeight: '400px', background: '#000' }}
+            className="w-full overflow-hidden relative flex-1"
+            style={{ background: '#000', borderRadius: '24px' }}
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
         >
-            <div className="relative w-full" style={{ minHeight: '400px' }}>
+            <div className="relative w-full h-full" style={{ borderRadius: '16px', overflow: 'hidden' }}>
                 {slides.map((slide, idx) => (
                     <div
                         key={slide.key}
@@ -37,7 +37,7 @@ export default function MediaCarousel({ slides }) {
                         style={{ opacity: idx === current ? 1 : 0, pointerEvents: idx === current ? 'auto' : 'none' }}
                     >
                         {slide.type === 'image' ? (
-                            <div className="relative w-full h-full" style={{ minHeight: '400px' }}>
+                            <div className="relative w-full h-full" style={{ borderRadius: '16px', overflow: 'hidden' }}>
                                 <img
                                     src={slide.url}
                                     alt={`Slide ${idx + 1}`}
@@ -85,7 +85,7 @@ export default function MediaCarousel({ slides }) {
                                 width: idx === current ? '24px' : '8px',
                                 height: '8px',
                                 borderRadius: '4px',
-                                backgroundColor: idx === current ? '#D00000' : 'rgba(255,255,255,0.5)',
+                                backgroundColor: idx === current ? '#e03047' : 'rgba(255,255,255,0.5)',
                                 border: 'none',
                                 cursor: 'pointer',
                             }}

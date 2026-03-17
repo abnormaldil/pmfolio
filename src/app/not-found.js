@@ -22,7 +22,7 @@ export default function NotFound() {
                 style={{
                     fontFamily: 'Humane-rg, sans-serif',
                     fontSize: 'clamp(120px, 20vw, 300px)',
-                    color: '#D00000',
+                    color: '#e03047',
                     lineHeight: 0.85,
                     marginBottom: '0.5rem',
                 }}
@@ -51,7 +51,7 @@ export default function NotFound() {
                     marginBottom: '2rem',
                 }}
             >
-                The page you're looking for doesn't exist or has been moved.
+                The page you&apos;re looking for doesn&apos;t exist or has been moved.
             </p>
             <Link
                 href="/"
@@ -62,7 +62,7 @@ export default function NotFound() {
                     letterSpacing: '0.15em',
                     textTransform: 'uppercase',
                     padding: '16px 36px',
-                    backgroundColor: '#D00000',
+                    backgroundColor: '#e03047',
                     color: 'white',
                     textDecoration: 'none',
                     transition: 'background-color 0.2s',

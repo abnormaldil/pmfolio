@@ -56,7 +56,7 @@ export default function VideoPlayer({ url: rawUrl, className = '' }) {
                                 )}
                                 <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/10 transition-colors duration-300">
                                     <div
-                                        className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-[#D00000] flex items-center justify-center transition-transform duration-300"
+                                        className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-[#e03047] flex items-center justify-center transition-transform duration-300"
                                         style={{ transform: isHovered ? 'scale(1.15)' : 'scale(1)' }}
                                     >
                                         <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
@@ -81,7 +81,7 @@ export default function VideoPlayer({ url: rawUrl, className = '' }) {
                             className="absolute inset-0 flex items-center justify-center z-10 transition-all duration-300"
                             style={{ backgroundColor: isHovered ? 'transparent' : 'rgba(0,0,0,0.25)', opacity: isHovered ? 0 : 1 }}
                         >
-                            <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-[#D00000] flex items-center justify-center">
+                            <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-[#e03047] flex items-center justify-center">
                                 <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
                                     <path d="M8 5v14l11-7z" />
                                 </svg>

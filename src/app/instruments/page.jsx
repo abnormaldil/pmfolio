@@ -1,6 +1,8 @@
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { Suspense } from "react";
 
+export const dynamic = "force-dynamic";
+
 async function InstrumentsData() {
   const supabase = createSupabaseServerClient();
 

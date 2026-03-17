@@ -2,14 +2,14 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import dynamic from "next/dynamic";
 
-const Spline = dynamic(() => import("@splinetool/react-spline"), {
+const Spline = dynamic(() => import("@/lib/spline/react-spline.js"), {
   ssr: false,
   loading: () => (
     <div className="w-full h-full flex items-center justify-center">
       <div
         className="w-8 h-8 rounded-full border-2 border-t-transparent"
         style={{
-          borderColor: "rgba(208,0,0,0.3)",
+          borderColor: "rgba(224,48,71,0.3)",
           borderTopColor: "transparent",
           animation: "spin 1s linear infinite",
         }}
@@ -62,6 +62,11 @@ export default function PortfolioChatbot({ isOpen, onClose }) {
     setMessage("");
     setIsLoading(true);
 
+    // Retain focus on the input immediately after sending
+    setTimeout(() => {
+      inputRef.current?.focus();
+    }, 10);
+
     try {
       const res = await fetch("/api/chatbot", {
         method: "POST",
@@ -77,6 +82,10 @@ export default function PortfolioChatbot({ isOpen, onClose }) {
       ]);
     } finally {
       setIsLoading(false);
+      // Ensure focus remains after loading finishes
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 10);
     }
   }, [message, isLoading]);
 
@@ -112,7 +121,7 @@ export default function PortfolioChatbot({ isOpen, onClose }) {
             border: "1px solid rgba(255,255,255,0.08)",
             borderRadius: "20px",
             boxShadow:
-              "0 0 60px rgba(208, 0, 0, 0.15), 0 25px 80px rgba(0,0,0,0.6)",
+              "0 0 60px rgba(224,48,71, 0.15), 0 25px 80px rgba(0,0,0,0.6)",
           }}
         >
           {/* Close button */}
@@ -134,7 +143,7 @@ export default function PortfolioChatbot({ isOpen, onClose }) {
             style={{
               minHeight: "220px",
               background:
-                "radial-gradient(ellipse at center, rgba(208,0,0,0.08) 0%, transparent 70%)",
+                "radial-gradient(ellipse at center, rgba(224,48,71,0.08) 0%, transparent 70%)",
             }}
           >
             {/* Subtle glow behind the bot */}
@@ -142,7 +151,7 @@ export default function PortfolioChatbot({ isOpen, onClose }) {
               className="absolute inset-0 pointer-events-none"
               style={{
                 background:
-                  "radial-gradient(circle at 50% 50%, rgba(208,0,0,0.12) 0%, transparent 60%)",
+                  "radial-gradient(circle at 50% 50%, rgba(224,48,71,0.12) 0%, transparent 60%)",
               }}
             />
             <Spline
@@ -164,7 +173,7 @@ export default function PortfolioChatbot({ isOpen, onClose }) {
             className="hidden lg:block w-px flex-shrink-0"
             style={{
               background:
-                "linear-gradient(to bottom, transparent, rgba(208,0,0,0.3), rgba(255,255,255,0.06), transparent)",
+                "linear-gradient(to bottom, transparent, rgba(224,48,71,0.3), rgba(255,255,255,0.06), transparent)",
             }}
           />
 
@@ -180,8 +189,8 @@ export default function PortfolioChatbot({ isOpen, onClose }) {
               <div
                 className="w-2.5 h-2.5 rounded-full flex-shrink-0"
                 style={{
-                  background: "#D00000",
-                  boxShadow: "0 0 8px rgba(208,0,0,0.6)",
+                  background: "#e03047",
+                  boxShadow: "0 0 8px rgba(224,48,71,0.6)",
                   animation: "chatbot-pulse 2s ease-in-out infinite",
                 }}
               />
@@ -189,7 +198,8 @@ export default function PortfolioChatbot({ isOpen, onClose }) {
                 <p
                   className="text-white leading-none"
                   style={{
-                    fontFamily: "Thedus-cl",
+                    paddingTop: "10px",
+                    fontFamily: "Thedus-wl",
                     fontWeight: 700,
                     fontSize: "14px",
                     letterSpacing: "0.15em",
@@ -224,7 +234,8 @@ export default function PortfolioChatbot({ isOpen, onClose }) {
                   <div className="text-center">
                     <p
                       style={{
-                        fontFamily: "Thedus-cl",
+                        paddingTop:"5px",
+                        fontFamily: "Thedus-wl",
                         fontWeight: 700,
                         fontSize: "16px",
                         letterSpacing: "0.12em",
@@ -257,13 +268,14 @@ export default function PortfolioChatbot({ isOpen, onClose }) {
                   <div
                     className="max-w-[85%] px-4 py-2.5 text-sm leading-relaxed"
                     style={{
+                      padding: "10px 12px",
                       borderRadius:
                         c.role === "user"
                           ? "16px 16px 4px 16px"
                           : "16px 16px 16px 4px",
                       background:
                         c.role === "user"
-                          ? "linear-gradient(135deg, #D00000, #a00000)"
+                          ? "linear-gradient(135deg, #e03047, #a00000)"
                           : "rgba(255,255,255,0.06)",
                       color:
                         c.role === "user"
@@ -340,7 +352,7 @@ export default function PortfolioChatbot({ isOpen, onClose }) {
                   style={{
                     background:
                       message.trim() && !isLoading
-                        ? "#D00000"
+                        ? "#e03047"
                         : "rgba(255,255,255,0.05)",
                     color:
                       message.trim() && !isLoading

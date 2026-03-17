@@ -37,7 +37,7 @@ export default class ErrorBoundary extends Component {
                     <p
                         style={{
                             color: 'rgba(255,255,255,0.4)',
-                            fontFamily: 'Thedus-cl, sans-serif',
+                            fontFamily: 'Thedus-wl, sans-serif',
                             fontSize: '14px',
                             letterSpacing: '0.15em',
                             textTransform: 'uppercase',

@@ -57,7 +57,7 @@
 }
 
 @font-face {
-  font-family: 'Thedus-cl';
+  font-family: 'Thedus-wl';
   src: url('/fonts/Thedus-CondensedLight.otf') format('opentype');
   font-weight: 300;
   font-style: normal;
@@ -80,7 +80,7 @@
 :root {
   --bg-dark: #0a0a0a;
   --bg-dark-secondary: #0A0A0A;
-  --red-accent: #D00000;
+  --red-accent: #e03047;
   --gold-accent: #C39738;
   --text-primary: #FFFFFF;
   --text-secondary: #888888;
@@ -120,6 +120,8 @@
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
 }
+
+
 
 /* Lenis Smooth Scroll */
 html.lenis,
@@ -411,12 +413,12 @@ body {
   0%,
   100% {
     opacity: 1;
-    box-shadow: 0 0 8px rgba(208, 0, 0, 0.6);
+    box-shadow: 0 0 8px rgba(224, 48, 71, 0.6);
   }
 
   50% {
     opacity: 0.6;
-    box-shadow: 0 0 16px rgba(208, 0, 0, 0.3);
+    box-shadow: 0 0 16px rgba(224, 48, 71, 0.3);
   }
 }
 
@@ -462,5 +464,933 @@ body {
 
   to {
     transform: rotate(360deg);
+  }
+}
+
+/* ── Chatbot Responsive Styles ── */
+.chatbot-overlay-container {
+  position: fixed;
+  inset: 0;
+  z-index: 101;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0;
+}
+
+@media (min-width: 768px) {
+  .chatbot-overlay-container {
+    align-items: center;
+    padding: 24px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .chatbot-overlay-container {
+    padding: 40px;
+  }
+}
+
+.chatbot-modal {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: rgba(10, 10, 15, 0.55);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5), 0 0 40px rgba(224, 48, 71, 0.1);
+  animation: chatbot-scale-in 0.35s ease forwards;
+
+  max-width: 100%;
+  height: 90dvh;
+  border-top-left-radius: 22px;
+  border-top-right-radius: 22px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+@media (min-width: 768px) {
+  .chatbot-modal {
+    max-width: 90vw;
+    height: min(700px, 85vh);
+    border-radius: 22px;
+    box-shadow: 0 40px 120px rgba(0, 0, 0, 0.7), 0 0 80px rgba(224, 48, 71, 0.15);
+  }
+}
+
+@media (min-width: 1024px) {
+  .chatbot-modal {
+    flex-direction: row;
+    max-width: 1200px;
+    height: min(680px, 85vh);
+  }
+}
+
+.chatbot-left-panel {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: radial-gradient(circle at 40% 0%, rgba(224, 48, 71, 0.22), transparent 65%);
+  padding: 16px;
+  min-height: 160px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+@media (min-width: 768px) {
+  .chatbot-left-panel {
+    min-height: 240px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .chatbot-left-panel {
+    width: 44%;
+    min-height: 320px;
+    padding: 28px;
+    border-bottom: none;
+    border-right: 1px solid rgba(255, 255, 255, 0.06);
+  }
+}
+
+.chatbot-spline-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  max-width: 140px;
+}
+
+@media (min-width: 768px) {
+  .chatbot-spline-wrapper {
+    max-width: 240px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .chatbot-spline-wrapper {
+    max-width: 520px;
+  }
+}
+
+.chatbot-divider {
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, rgba(224, 48, 71, 0.4), rgba(255, 255, 255, 0.08), transparent);
+}
+
+/* ── What We Craft Responsive Styles ── */
+.craft-section {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background-color: black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 0;
+  overflow: hidden;
+}
+
+.craft-headline {
+  text-transform: uppercase;
+  color: white;
+  text-align: center;
+  line-height: 0.85;
+  letter-spacing: -0.02em;
+  margin-bottom: 2rem;
+  padding: 0 16px;
+  font-family: 'Humane-rg', sans-serif;
+  font-size: clamp(60px, 12vw, 150px);
+}
+
+@media (min-width: 768px) {
+  .craft-headline {
+    margin-bottom: 3rem;
+  }
+}
+
+.craft-buttons-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 16px;
+  width: 100%;
+  max-width: 1440px;
+  position: relative;
+  z-index: 20;
+  margin-bottom: 0;
+}
+
+@media (min-width: 768px) {
+  .craft-buttons-container {
+    gap: 12px;
+  }
+}
+
+.craft-category-btn {
+  border: 1px solid transparent;
+  padding: 12px 16px;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  cursor: pointer;
+  outline: none;
+  font-family: 'Thedus-wd', sans-serif;
+  font-size: clamp(12px, 2vw, 18px);
+  letter-spacing: 0.05em;
+  position: relative;
+  z-index: 20;
+  flex: 1 1 calc(50% - 8px);
+  /* 2 buttons per line on mobile */
+  min-width: 140px;
+  text-align: center;
+}
+
+@media (min-width: 640px) {
+  .craft-category-btn {
+    flex: 0 1 auto;
+    min-width: 180px;
+    padding: 16px 24px;
+    letter-spacing: 0.1em;
+  }
+}
+
+@media (min-width: 1024px) {
+  .craft-category-btn {
+    min-width: 245px;
+    padding: 24px 32px;
+  }
+}
+
+.craft-category-btn.active {
+  background-color: white;
+  color: black;
+  border-color: white;
+}
+
+.craft-category-btn.inactive {
+  background-color: black;
+  color: white;
+  border-color: #333;
+}
+
+.craft-category-btn.inactive:hover {
+  background-color: #111;
+}
+
+.craft-images-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  margin-top: 16px;
+  flex: 1;
+}
+
+@media (min-width: 768px) {
+  .craft-images-wrapper {
+    margin-top: 48px;
+  }
+}
+
+.craft-images-inner {
+  position: relative;
+  width: 100%;
+  max-width: 1440px;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0 8px;
+  gap: 4px;
+}
+
+@media (min-width: 768px) {
+  .craft-images-inner {
+    padding: 0 16px;
+    gap: 16px;
+  }
+}
+
+.craft-person-container {
+  flex: 1;
+  position: relative;
+  height: 40vh;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+@media (min-width: 768px) {
+  .craft-person-container {
+    height: 60vh;
+  }
+}
+
+@media (min-width: 1024px) {
+  .craft-person-container {
+    height: 70vh;
+  }
+
+}
+
+
+/* =====================================
+   HERO MOBILE LAYOUT FIX
+   ===================================== */
+
+@media (max-width: 768px) {
+
+  /* hero height */
+  #home {
+    height: auto !important;
+    min-height: 100vh;
+  }
+
+  /* stack layout */
+  #home .grid {
+    display: flex !important;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  /* center text block */
+  #home .col-span-4 {
+    width: 100%;
+    align-items: center;
+    text-align: center;
+  }
+
+  /* Main Headline Fix (Visually dominant) */
+  #home .col-span-4>div:first-child h2,
+  #home .col-span-4>div:first-child p {
+    font-size: clamp(55px, 13vw, 95px) !important;
+    line-height: 0.85 !important;
+  }
+
+  #home .col-span-4>div:first-child h1 {
+    font-size: clamp(80px, 18vw, 130px) !important;
+    line-height: 0.8 !important;
+  }
+
+  /* robot center */
+  #home .md\:col-span-5 {
+    width: 100%;
+    justify-content: center !important;
+    transform: none !important;
+  }
+
+  /* description block (Subtext smaller) */
+  #home .col-span-3 {
+    width: 100%;
+    align-items: center !important;
+    text-align: center !important;
+  }
+
+  #home .col-span-3 p:first-child {
+    font-size: clamp(16px, 4vw, 22px) !important;
+    line-height: 1.1 !important;
+    margin-top: 20px !important;
+    letter-spacing: 0.04em !important;
+    text-align: center !important;
+  }
+
+  /* CTA Buttons single row, properly scaled */
+  #home .mt-10 {
+    align-items: center !important;
+  }
+
+  #home .mt-10>div.flex {
+    flex-direction: row !important;
+    justify-content: center !important;
+    height: 50px !important;
+    width: 100% !important;
+    gap: 8px !important;
+  }
+
+  #home .mt-10 button {
+    flex: 1 1 50% !important;
+    height: 100% !important;
+  }
+
+  #home .mt-10 button span {
+    font-size: clamp(11px, 2.8vw, 15px) !important;
+    padding: 0 4px !important;
+    white-space: nowrap !important;
+  }
+
+  #home .mt-10>p {
+    text-align: center !important;
+    padding-left: 0 !important;
+    margin-top: 12px !important;
+    font-size: clamp(10px, 2.5vw, 14px) !important;
+  }
+
+  /* spline responsive */
+  #spline-container {
+    width: 100% !important;
+    height: 280px !important;
+    margin-left: 0 !important;
+  }
+
+  #home h3 {
+    font-size: clamp(60px, 18vw, 110px) !important;
+  }
+}
+
+/* =====================================
+   WEBSTACK RESPONSIVE LAYOUT FIX
+   ===================================== */
+
+@media (max-width: 768px) {
+  .webstack-card-container {
+    aspect-ratio: 4/5 !important;
+    padding: 24px !important;
+  }
+
+  .webstack-header {
+    flex-direction: column !important;
+    padding-bottom: 24px !important;
+    gap: 24px !important;
+  }
+
+  .webstack-header p {
+    text-align: center !important;
+  }
+}
+
+
+/* =============================================
+   RESPONSIVE STYLES — TABLET (≤1024px)
+   ============================================= */
+@media (max-width: 1024px) {
+
+  /* ── Navbar Drawer ── */
+  .fixed.top-0.left-0.h-full {
+    width: 380px !important;
+  }
+
+  /* ── WhyUs: allow headline wrap ── */
+  #about h2 {
+    white-space: normal !important;
+    word-break: break-word;
+  }
+
+  /* ── WhyUs: stack headline + description ── */
+  #about .flex.items-end.justify-between {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 24px;
+  }
+
+  #about .flex.items-end.justify-between p {
+    text-align: left !important;
+    align-self: flex-start !important;
+    max-width: 100% !important;
+  }
+
+  /* ── Portfolio tab buttons ── */
+  #portfolio .sticky.bottom-8 button {
+    padding-left: 32px !important;
+    padding-right: 32px !important;
+  }
+
+  /* ── Portfolio content padding ── */
+  #portfolio .max-w-\[1200px\] {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  /* ── CreativesGrid: 2 columns on tablet ── */
+  #portfolio .grid.grid-cols-4 {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 16px !important;
+  }
+
+  /* ── CreativesGrid: shrink circles ── */
+  #portfolio .grid.grid-cols-4 .rounded-full {
+    width: 140px !important;
+    height: 140px !important;
+    margin-bottom: -45px !important;
+  }
+
+  #portfolio .grid.grid-cols-4 .rounded-full svg {
+    width: 56px !important;
+    height: 56px !important;
+  }
+
+  /* ── CreativesGrid: smaller red card ── */
+  #portfolio .grid.grid-cols-4>div>div:last-child {
+    min-height: 220px !important;
+    padding-top: 60px !important;
+  }
+
+  /* ── CreativeDetail: shrink circle + reduce padding ── */
+  #portfolio .w-full.flex[style*="min-height"]>.flex-shrink-0 {
+    width: 240px !important;
+    margin-right: -60px !important;
+  }
+
+  #portfolio .w-full.flex[style*="min-height"]>.flex-shrink-0 .rounded-full {
+    width: 220px !important;
+    height: 220px !important;
+  }
+
+  #portfolio .w-full.flex[style*="min-height"]>.flex-1 {
+    padding: 40px 40px 40px 90px !important;
+  }
+
+  /* ── WebsitesStack card header ── */
+  .stack-card .flex.justify-between.items-center {
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+    padding-top: 16px !important;
+    padding-bottom: 16px !important;
+  }
+
+  /* ── Footer buttons ── */
+  #portfolio~section .flex.items-center.gap-4 a,
+  footer .flex.items-center.gap-4 a {
+    padding: 14px 24px !important;
+  }
+}
+
+
+/* =============================================
+   RESPONSIVE STYLES — TABLET PORTRAIT (≤768px)
+   ============================================= */
+@media (max-width: 768px) {
+
+  /* ── Navbar Drawer ── */
+  .fixed.top-0.left-0.h-full {
+    width: min(85vw, 340px) !important;
+    padding-left: 16px !important;
+  }
+
+  .fixed.top-0.left-0.h-full nav {
+    padding-left: 12px !important;
+    padding-right: 20px !important;
+  }
+
+  .fixed.top-0.left-0.h-full nav a {
+    font-size: clamp(16px, 4vw, 22px) !important;
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+    padding-right: 16px !important;
+    min-width: 140px !important;
+  }
+
+  /* ── Navbar header padding ── */
+  header .max-w-\[1440px\] {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  /* ── Navbar: shrink CONTACT US text to avoid logo overlap ── */
+  header nav a span {
+    font-size: clamp(14px, 3vw, 18px) !important;
+  }
+
+  header nav a {
+    gap: 1px !important;
+  }
+
+  /* ── WhyUs headline sizing ── */
+  #about h2 {
+    font-size: clamp(42px, 12vw, 200px) !important;
+    white-space: normal !important;
+  }
+
+  #about .flex.items-end.justify-between p {
+    font-size: clamp(13px, 3vw, 16px) !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    text-align: left !important;
+    line-height: 1.6 !important;
+    white-space: normal !important;
+    word-break: normal !important;
+  }
+
+  /* ── Portfolio heading ── */
+  #portfolio>h2 {
+    font-size: clamp(32px, 8vw, 60px) !important;
+    margin-bottom: 24px !important;
+    padding-top: 12px !important;
+    padding-bottom: 12px !important;
+  }
+
+  /* ── Portfolio tab buttons ── */
+  #portfolio .sticky.bottom-8 {
+    bottom: 12px !important;
+  }
+
+  #portfolio .sticky.bottom-8 button {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    padding-top: 12px !important;
+    padding-bottom: 12px !important;
+    font-size: clamp(14px, 3.5vw, 20px) !important;
+  }
+
+  /* ── Portfolio content area ── */
+  #portfolio .max-w-\[1200px\] {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+    min-height: 400px !important;
+  }
+
+  /* ── WebsitesStack card adjustments ── */
+  .stack-card .flex.justify-between.items-center {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 8px;
+    padding: 16px !important;
+  }
+
+  /* ── WebsitesStack: smaller media area ── */
+  .stack-card .rounded-2xl {
+    min-height: 380px !important;
+  }
+
+  /* ── MediaCarousel margins ── */
+  .stack-card .mx-8 {
+    margin-left: 12px !important;
+    margin-right: 12px !important;
+    margin-bottom: 12px !important;
+    min-height: 280px !important;
+  }
+
+  .stack-card .mx-8 .relative.w-full {
+    min-height: 280px !important;
+  }
+
+  /* ── CreativeDetail: stack vertically on tablet portrait ── */
+  #portfolio .w-full.flex[style*="min-height"] {
+    flex-direction: column !important;
+    min-height: auto !important;
+  }
+
+  #portfolio .w-full.flex[style*="min-height"]>.flex-shrink-0 {
+    width: 100% !important;
+    margin-right: 0 !important;
+    padding: 32px 0 !important;
+    display: flex;
+    justify-content: center;
+  }
+
+  #portfolio .w-full.flex[style*="min-height"]>.flex-shrink-0 .rounded-full {
+    width: 160px !important;
+    height: 160px !important;
+  }
+
+  #portfolio .w-full.flex[style*="min-height"]>.flex-shrink-0 .rounded-full svg {
+    width: 70px !important;
+    height: 70px !important;
+  }
+
+  #portfolio .w-full.flex[style*="min-height"]>.flex-1 {
+    padding: 32px 24px !important;
+  }
+
+  #portfolio .w-full.flex[style*="min-height"]>.flex-1 h3 {
+    font-size: clamp(32px, 8vw, 50px) !important;
+    margin-bottom: 24px !important;
+  }
+
+  #portfolio .w-full.flex[style*="min-height"]>.flex-1 .grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 16px !important;
+    padding-right: 0 !important;
+  }
+
+  /* ── CreativeDetail: close button ── */
+  #portfolio .w-full.flex[style*="min-height"]>button {
+    width: 44px !important;
+    height: 44px !important;
+    z-index: 20 !important;
+  }
+
+  /* ── Contact section ── */
+  #contact-us .grid {
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+  }
+
+  #contact-us .flex.flex-col.leading-\[0\.8\] {
+    text-align: center !important;
+    align-items: center !important;
+  }
+
+  #contact-us .max-w-\[600px\] {
+    max-width: 100% !important;
+    justify-self: center !important;
+  }
+
+  /* ── Contact buttons — full width ── */
+  #contact-us .flex.flex-wrap.items-center.gap-4 {
+    flex-direction: column !important;
+    width: 100%;
+  }
+
+  #contact-us .flex.flex-wrap.items-center.gap-4 button {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  /* ── Footer: stack buttons vertically ── */
+  section:last-of-type .flex.items-center.gap-4 {
+    flex-direction: column !important;
+    width: 100%;
+    gap: 12px !important;
+  }
+
+  section:last-of-type .flex.items-center.gap-4 a {
+    padding: 14px 28px !important;
+    width: 100% !important;
+    text-align: center;
+    justify-content: center !important;
+  }
+
+  /* ── Footer: center content ── */
+  section:last-of-type .w-full.relative.z-10 {
+    text-align: center;
+  }
+
+  /* ── Footer social icons ── */
+  section:last-of-type .flex.items-center.gap-5 a {
+    width: 44px !important;
+    height: 44px !important;
+  }
+
+  /* ── Footer copyright ── */
+  section:last-of-type>p {
+    font-size: clamp(10px, 2.5vw, 14px) !important;
+    text-align: center;
+  }
+}
+
+
+/* =============================================
+   RESPONSIVE STYLES — MOBILE (≤480px)
+   ============================================= */
+@media (max-width: 480px) {
+
+  /* ── Navbar Drawer: tighter ── */
+  .fixed.top-0.left-0.h-full {
+    width: 85vw !important;
+    padding-left: 10px !important;
+    padding-bottom: 60px !important;
+  }
+
+  .fixed.top-0.left-0.h-full nav a {
+    font-size: clamp(14px, 4vw, 18px) !important;
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+    padding-right: 12px !important;
+    letter-spacing: 0.1em !important;
+  }
+
+  /* ── Navbar: hide CONTACT text, show only chatbot icon on very small screens ── */
+  header nav a .uppercase {
+    display: none !important;
+  }
+
+  header nav a {
+    gap: 0 !important;
+  }
+
+  /* ── WhyUs ── */
+  #about {
+    padding-top: clamp(150px, 20vh, 120px) !important;
+    padding-bottom: clamp(20px, 4vh, 40px) !important;
+  }
+
+  #about h2 {
+    font-size: clamp(50px, 25vw, 160px) !important;
+    line-height: 1 !important;
+    text-align: left;
+    padding-top: 35px !important;
+  }
+
+  #about .flex.items-end.justify-between {
+    margin-top: 0 !important;
+    text-align: right !important;
+  }
+
+  #about .flex.items-end.justify-between p {
+    font-size: clamp(18px, 3vw, 14px) !important;
+    padding-bottom: 7px !important;
+    /* text-align: center !important; */
+  }
+
+  /* ── WhyUs avatars ── */
+  #about .flex.items-center.gap-5 {
+    flex-wrap: wrap;
+    gap: 12px !important;
+  }
+
+  /* ── Portfolio section ── */
+  #portfolio {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+
+  #portfolio>h2 {
+    font-size: clamp(26px, 7vw, 48px) !important;
+    margin-bottom: 16px !important;
+  }
+
+  /* ── Portfolio tabs ── */
+  #portfolio .sticky.bottom-8 {
+    bottom: 8px !important;
+  }
+
+  #portfolio .sticky.bottom-8 button {
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+    font-size: clamp(12px, 3.5vw, 16px) !important;
+    letter-spacing: 0.1em !important;
+  }
+
+  /* ── CreativesGrid: single column ── */
+  #portfolio .grid.grid-cols-4 {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+
+  #portfolio .grid.grid-cols-4 .rounded-full {
+    width: 120px !important;
+    height: 120px !important;
+    margin-bottom: -40px !important;
+  }
+
+  #portfolio .grid.grid-cols-4 .rounded-full svg {
+    width: 48px !important;
+    height: 48px !important;
+  }
+
+  #portfolio .grid.grid-cols-4>div>div:last-child {
+    min-height: 180px !important;
+    padding-top: 55px !important;
+    padding-bottom: 20px !important;
+    padding-left: 20px !important;
+  }
+
+  /* ── CreativeDetail: mobile layout ── */
+  .creative-detail-wrapper {
+    flex-direction: column !important;
+  }
+
+  .creative-detail-icon-wrap {
+    width: 100% !important;
+    padding-top: 3rem !important;
+    padding-bottom: 3rem !important;
+    margin-right: 0 !important;
+    background-color: white !important;
+  }
+
+  .creative-detail-icon-circle {
+    width: 200px !important;
+    height: 200px !important;
+  }
+
+  .creative-detail-red-wrap {
+    padding: 50px 20px !important;
+  }
+
+  .creative-detail-title {
+    font-size: clamp(40px, 8vw, 70px) !important;
+    margin-bottom: 2rem !important;
+    padding-bottom: 15px !important;
+  }
+
+  .creative-detail-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 16px !important;
+    padding-right: 0 !important;
+  }
+
+  /* ── WebsitesStack: tighter cards ── */
+  .stack-card .flex.justify-between.items-center {
+    padding: 12px !important;
+    gap: 6px;
+  }
+
+  .stack-card .flex.justify-between.items-center p {
+    font-size: clamp(9px, 2.5vw, 12px) !important;
+  }
+
+  .stack-card .flex.justify-between.items-center a {
+    font-size: clamp(9px, 2.5vw, 12px) !important;
+  }
+
+  /* ── MediaCarousel: minimal margins ── */
+  .stack-card .mx-8 {
+    margin-left: 8px !important;
+    margin-right: 8px !important;
+    margin-bottom: 8px !important;
+    min-height: 220px !important;
+  }
+
+  .stack-card .mx-8 .relative.w-full {
+    min-height: 220px !important;
+  }
+
+  /* ── Contact ── */
+  #contact-us {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  #contact-us .flex.flex-col.leading-\[0\.8\] span {
+    font-size: clamp(60px, 16vw, 140px) !important;
+  }
+
+  /* ── Contact form inputs ── */
+  #contact-us input,
+  #contact-us textarea {
+    padding: 12px 14px !important;
+    font-size: 13px !important;
+  }
+
+  #contact-us .flex.flex-wrap.items-center.gap-4 button {
+    padding: 12px 20px !important;
+    font-size: clamp(11px, 3vw, 13px) !important;
+  }
+
+  /* ── Footer ── */
+  section:last-of-type {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  section:last-of-type h2 {
+    font-size: clamp(60px, 16vw, 160px) !important;
+  }
+
+  section:last-of-type .flex.items-center.gap-4 a {
+    padding: 12px 20px !important;
+    font-size: clamp(11px, 3vw, 14px) !important;
+  }
+
+  section:last-of-type .flex.items-center.gap-5 a {
+    width: 40px !important;
+    height: 40px !important;
+  }
+
+  section:last-of-type .flex.items-center.gap-5 a svg.relative {
+    width: 18px !important;
+    height: 18px !important;
+  }
+
+  section:last-of-type>p {
+    font-size: clamp(9px, 2.5vw, 12px) !important;
+    letter-spacing: 0.15em !important;
   }
 }
