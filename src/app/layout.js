@@ -28,7 +28,7 @@ const anton = Anton({
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://pixelatedmedia.in";
 const siteName = "Pixelated Media";
 const siteDescription =
-  "We don't just deliver files. We build digital assets that turn visitors into customers with design that actually works. Trusted by 100+ brands.";
+  "Pixelated Media is a creative design studio specializing in branding, social media creatives, UI/UX design, and visual storytelling for global clients.";
 
 export const metadata = {
   metadataBase: new URL(siteUrl),
@@ -49,7 +49,13 @@ export const metadata = {
     "digital design agency",
     "digital design agency in India",
     "best digital design agency in India",
-    "best Freelnce designer"
+    "best Freelance designer",
+    "Pixelated Media",
+    'graphic designer India',
+    'branding design',
+    'social media creatives',
+    'UI UX design',
+    'creative studio',
   ],
   authors: [{ name: siteName }],
   creator: siteName,
