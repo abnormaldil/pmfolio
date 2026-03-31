@@ -88,7 +88,7 @@ export default function HeroDesktop() {
     }, []);
 
     return (
-        <section id="home-desktop" className="relative w-full h-screen bg-[#EFEFEF] overflow-hidden flex flex-col">
+        <section id="home-desktop" className="relative w-full h-screen bg-[#EFEFEF] flex flex-col">
 
             {/* ── Background Marquee ── */}
             <div 
@@ -146,7 +146,7 @@ export default function HeroDesktop() {
                     {/* ── LEFT: Headline + Buttons — 4 cols ── */}
                     <div 
                         ref={leftColumnRef}
-                        className="col-span-4 min-w-[420px] flex flex-col justify-center z-20 h-full max-w-[600px]">
+                        className="col-span-4 flex flex-col justify-center z-20 h-full w-full">
 
                         <div className="flex flex-col leading-none">
                             <h2
@@ -154,7 +154,7 @@ export default function HeroDesktop() {
                                 style={{
                                     fontFamily: 'Humane-l',
                                     fontWeight: 300,
-                                    fontSize: 'clamp(50px, 6.5vw, 150px)',
+                                    fontSize: 'clamp(32px, 5vw, 150px)',
                                     color: '#111',
                                 }}
                             >
@@ -166,7 +166,7 @@ export default function HeroDesktop() {
                                 style={{
                                     fontFamily: 'Humane-L',
                                     fontWeight: 300,
-                                    fontSize: 'clamp(90px, 13vw, 280px)',
+                                    fontSize: 'clamp(60px, 10vw, 280px)',
                                     color: '#e03047',
                                 }}
                             >
@@ -178,7 +178,7 @@ export default function HeroDesktop() {
                                 style={{
                                     fontFamily: 'Humane-l',
                                     fontWeight: 300,
-                                    fontSize: 'clamp(50px, 6.5vw, 150px)',
+                                    fontSize: 'clamp(32px, 5vw, 150px)',
                                     color: '#111',
                                 }}
                             >
@@ -190,7 +190,7 @@ export default function HeroDesktop() {
                                 style={{
                                     fontFamily: 'Humane-L',
                                     fontWeight: 300,
-                                    fontSize: 'clamp(90px, 13vw, 280px)',
+                                    fontSize: 'clamp(60px, 10vw, 280px)',
                                     color: '#111',
                                 }}
                             >
@@ -251,12 +251,11 @@ export default function HeroDesktop() {
 
                             {/* Tagline below buttons */}
                             <p
-                                className="mt-3 uppercase text-left pl-1"
+                                className="mt-3 uppercase text-left pl-1 w-full"
                                 style={{
-
                                     fontFamily: 'Thedus-wl',
                                     fontWeight: 300,
-                                    fontSize: 'clamp(14.5px, 0.3vw, 18px)',
+                                    fontSize: 'clamp(10px, 0.8vw, 14px)',
                                     letterSpacing: '0.06em',
                                     color: '#111',
                                 }}
@@ -276,7 +275,7 @@ export default function HeroDesktop() {
                     {/* ── RIGHT: Description top + Powered By bottom ── */}
                     <div 
                         ref={rightColumnRef}
-                        className="col-span-3 min-w-[260px] flex flex-col justify-between h-full py-8 items-end text-right">
+                        className="col-span-3 flex flex-col justify-between h-full py-8 items-end text-right w-full">
 
                       /
 
@@ -299,7 +298,7 @@ export default function HeroDesktop() {
                                 style={{
                                     fontFamily: 'Humane-l',
                                     fontWeight: 300,
-                                    fontSize: 'clamp(80px, 12vw, 175px)',
+                                    fontSize: 'clamp(50px, 8vw, 175px)',
                                     color: '#000000ff',
                                 }}
                             >
@@ -325,7 +324,7 @@ export default function HeroDesktop() {
                                 style={{
                                     fontFamily: 'Humane-l',
                                     fontWeight: 300,
-                                    fontSize: 'clamp(80px, 12vw, 175px)',
+                                    fontSize: 'clamp(50px, 8vw, 175px)',
                                     color: '#000000ff',
                                 }}
                             >

@@ -39,7 +39,7 @@ export default function Portfolio({ websitesData = [], creativesData = [] }) {
                     fontFamily: 'Humane-rg',
                     fontWeight: 400,
                     letterSpacing: '0.015em',
-                    fontSize: 'clamp(50px, 7vw, 100px)',
+                    fontSize: 'clamp(60px, 11vw, 160px)',
                 }}
             >
                 <span style={{ color: '#e03047' }}>
@@ -50,13 +50,21 @@ export default function Portfolio({ websitesData = [], creativesData = [] }) {
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -10 }}
                             transition={{ duration: 0.3 }}
-                            style={{ display: 'inline-block' }}
+                            style={{ display: 'inline-block', fontSize: 'clamp(80px, 11vw, 160px)' }}
                         >
                             {activeTab === 'WEBSITES' ? 'WEBSITES' : 'CREATIVES'}
                         </motion.span>
                     </AnimatePresence>
                 </span>
-                <span style={{ color: '#111' }}> WE'VE ENGINEERED</span>
+                <motion.span
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+                    style={{ color: '#111', fontSize: 'clamp(60px, 11vw, 160px)', display: 'inline-block' }}
+                >
+                    &nbsp;WE'VE ENGINEERED
+                </motion.span>
             </h2>
 
             {/* Content */}
@@ -91,14 +99,15 @@ export default function Portfolio({ websitesData = [], creativesData = [] }) {
                 {/* WEBSITES */}
                 <button
                     onClick={() => handleTabChange('WEBSITES')}
-                    className="group relative overflow-hidden px-12 py-4 lg:px-28 lg:py-7 uppercase border-r border-neutral-300"
+                    className="group relative overflow-hidden px-16 py-6 lg:px-36 lg:py-10 uppercase border-r border-neutral-300"
                     style={{
                         fontFamily: 'Thedus-wl',
                         fontWeight: 500,
                         fontSize: 'clamp(20px, 2.5vw, 32px)',
                         letterSpacing: '0.05em',
-
-                        padding: '10 30px'
+                        padding: '10 30px',
+                        paddingLeft:'15px',
+                        paddingRight:'15px',
                     }}
                 >
 
@@ -128,13 +137,16 @@ export default function Portfolio({ websitesData = [], creativesData = [] }) {
                 {/* CREATIVES */}
                 <button
                     onClick={() => handleTabChange('CREATIVES')}
-                    className="group relative overflow-hidden px-12 py-4 lg:px-28 lg:py-7 uppercase"
+                    className="group relative overflow-hidden px-16 py-6 lg:px-36 lg:py-10 uppercase"
                     style={{
                         fontFamily: 'Thedus-wl',
                         fontWeight: 500,
                         fontSize: 'clamp(20px, 2.5vw, 32px)',
-                        letterSpacing: '0.05em',
-                         padding: '10 30px'
+                        letterSpacing: '0.1em',
+                        padding: '10 30px',
+                        paddingLeft: '15px',
+                        paddingRight: '15px',
+                        
                     }}
                 >
 

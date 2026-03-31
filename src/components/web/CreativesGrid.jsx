@@ -1,5 +1,6 @@
 'use client';
 import { useState, useRef, useCallback, useEffect } from 'react';
+import Image from 'next/image';
 import { normalizeCategory } from '@/lib/mediaHelpers';
 import CreativeDetail from './CreativeDetail';
 import gsap from 'gsap';
@@ -16,58 +17,29 @@ const creativeCategories = [
         key: 'video_editing',
         label: 'VIDEO\nEDITING',
         displayLabel: ['VIDEO', 'EDITING'],
-        icon: (
-            <svg width="110" height="110" viewBox="0 0 80 80" fill="none">
-                <rect x="8" y="22" width="42" height="36" rx="6" fill="white" />
-                <path d="M54 32L72 24V56L54 48V32Z" fill="white" />
-            </svg>
-        ),
+        icon: '/assets/video-icon.png',
+        description: 'Professional storytelling through cinematic cutting and color grading.'
     },
     {
         key: 'motion_gfx',
         label: 'MOTION\nGFX',
         displayLabel: ['MOTION', 'GFX'],
-        icon: (
-            <svg width="110" height="110" viewBox="0 0 80 80" fill="none">
-                <circle cx="52" cy="16" r="6" stroke="white" strokeWidth="3" fill="none" />
-                <path d="M48 24L36 36L24 32" stroke="white" strokeWidth="3" strokeLinecap="round" />
-                <path d="M36 36L32 52L20 60" stroke="white" strokeWidth="3" strokeLinecap="round" />
-                <path d="M36 36L48 48L56 60" stroke="white" strokeWidth="3" strokeLinecap="round" />
-                <circle cx="14" cy="28" r="3" fill="white" />
-                <circle cx="8" cy="44" r="3" fill="white" />
-                <circle cx="18" cy="52" r="2" fill="white" />
-            </svg>
-        ),
+        icon: '/assets/mgfx-icon.png',
+        description: 'Dynamic animations and visual effects that bring digital designs to life.'
     },
     {
         key: 'graphics',
         label: 'GRAPHIC\nDESIGN',
         displayLabel: ['GRAPHIC', 'DESIGN'],
-        icon: (
-            <svg width="110" height="110" viewBox="0 0 80 80" fill="none">
-                <rect x="44" y="10" width="12" height="36" rx="3" transform="rotate(35 44 10)" stroke="white" strokeWidth="3" fill="none" />
-                <path d="M32 58L28 70L40 66Z" stroke="white" strokeWidth="2.5" fill="none" />
-                <rect x="10" y="44" width="50" height="12" rx="3" stroke="white" strokeWidth="3" fill="none" />
-                <path d="M20 44V50M30 44V50M40 44V50M50 44V50" stroke="white" strokeWidth="2" />
-                <rect x="8" y="16" width="8" height="8" rx="2" fill="white" />
-                <rect x="64" y="16" width="8" height="8" rx="2" fill="white" />
-            </svg>
-        ),
+        icon: '/assets/gfx-icon.png',
+        description: 'Modern brand identities and high-impact visual communication systems.'
     },
     {
         key: 'ui_ux',
         label: 'UI/UX',
         displayLabel: ['UI/UX'],
-        icon: (
-            <svg width="110" height="110" viewBox="0 0 80 80" fill="none">
-                <rect x="16" y="20" width="44" height="36" rx="2" stroke="white" strokeWidth="3" fill="none" strokeDasharray="4 2" />
-                <rect x="10" y="14" width="10" height="10" rx="2" fill="white" />
-                <rect x="60" y="14" width="10" height="10" rx="2" fill="white" />
-                <rect x="10" y="56" width="10" height="10" rx="2" fill="white" />
-                <rect x="60" y="56" width="10" height="10" rx="2" fill="white" />
-                <path d="M50 46L58 70L62 58L74 54L50 46Z" fill="white" />
-            </svg>
-        ),
+        icon: '/assets/ui-icon.png',
+        description: 'Intuitive user interfaces and seamless digital experiences designed to convert.'
     },
 ];
 
@@ -129,7 +101,9 @@ export default function CreativesGrid({ creativesData }) {
     useGSAP(() => {
         if (!containerRef.current) return;
 
-        const ctx = gsap.context(() => {
+        const mm = gsap.matchMedia();
+
+        mm.add("(min-width: 768px)", () => {
             const scrollContainer = containerRef.current.querySelector('.creatives-scroll-container');
             const cardsWrapper = containerRef.current.querySelector('.cards-wrapper');
 
@@ -159,8 +133,7 @@ export default function CreativesGrid({ creativesData }) {
             });
 
             tlRef.current = tl;
-
-        }, containerRef);
+        });
 
         // 👇 wait for layout to stabilize then refresh all triggers
         setTimeout(() => {
@@ -168,10 +141,9 @@ export default function CreativesGrid({ creativesData }) {
         }, 200);
 
         return () => {
-            ctx.revert();
+            mm.revert();
             tlRef.current = null;
         };
-
     }, { scope: containerRef });
 
     // ─── open/close transitions ────────────────────────────────────────────────
@@ -237,9 +209,9 @@ export default function CreativesGrid({ creativesData }) {
         <div className="w-full overflow-hidden" ref={containerRef}>
             {/* Grid Container */}
             <div
-                className="creatives-scroll-container w-full h-[80vh] min-h-[600px] flex items-center "
+                className="creatives-scroll-container w-full md:h-[80vh] md:min-h-[600px] h-auto flex items-center py-20 md:py-0"
             >
-                <div className="cards-wrapper flex gap-12 md:gap-60 px-[10vw] w-max">
+                <div className="cards-wrapper flex flex-col md:flex-row gap-20 md:gap-60 md:px-[10vw] w-full md:w-max items-center">
                     {creativeCategories.map((item, index) => {
                         const count = creativesData.filter(c => normalizeCategory(c.category) === item.key).length;
                         const key = item.key;
@@ -250,21 +222,26 @@ export default function CreativesGrid({ creativesData }) {
                                 className={`card-${index} shrink-0 w-[280px] flex flex-col items-center group cursor-pointer creative-card`}
                             >
                                 <div
-                                    className="relative z-10 flex items-center justify-center rounded-full group-hover:scale-105 transition-transform duration-300 card-icon"
+                                    className="relative z-10 flex items-center justify-center group-hover:scale-105 transition-transform duration-500 card-icon"
                                     style={{
-                                        width: '200px',
-                                        height: '200px',
-                                        background: 'radial-gradient(circle at 35% 35%, #4a4a4a, #1a1a1a)',
-                                        boxShadow: '0 20px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1)',
-                                        marginBottom: '-60px',
+                                        width: '280px',
+                                        height: '280px',
+                                        marginBottom: '-120px',
                                     }}
                                 >
-                                    {item.icon}
+                                    <Image 
+                                        src={item.icon} 
+                                        alt={item.key} 
+                                        width={280} 
+                                        height={280} 
+                                        className="object-contain"
+                                        priority
+                                    />
                                 </div>
 
                                 <div
                                     className="w-full flex items-end pb-9 pl-8 rounded-sm card-red"
-                                    style={{ backgroundColor: '#e03047',     paddingTop: '80px', minHeight: '280px', height: '320px' }}
+                                    style={{ backgroundColor: '#e03047', paddingTop: '80px', minHeight: '280px', height: '320px' }}
                                 >
                                     <div>
                                         <p
@@ -276,10 +253,24 @@ export default function CreativesGrid({ creativesData }) {
                                                 letterSpacing: '0.02em',
                                                 paddingLeft: '36px',
                                                 paddingRight: '36px',
-                                                paddingBottom: '15px'
+                                                paddingBottom: '38px'
                                             }}
                                         >
                                             {item.label}
+                                        </p>
+                                        <p
+                                            className="uppercase text-white/70 whitespace-pre-line leading-[1.3] mt-2 mb-4"
+                                            style={{
+                                                fontFamily: 'Thedus-wl',
+                                                fontWeight: 300,
+                                                fontSize: 'clamp(15px, 0.9vw, 13px)',
+                                                letterSpacing: '0.15em',
+                                                paddingLeft: '38px',
+                                                paddingRight: '36px',
+                                                paddingBottom: '25px'
+                                            }}
+                                        >
+                                            {item.description}
                                         </p>
                                         {/* {count > 0 && (
                                             <p className="text-white/60 mt-4 text-xs uppercase tracking-[0.15em]"

@@ -63,7 +63,7 @@ tl.to(headlineRef.current, {
     return (
 <section
   id="home-mobile"
-  className="relative w-full min-h-screen bg-[#EFEFEF] overflow-hidden flex flex-col pb-[40px] px-[24px]"
+  className="relative w-full min-h-screen bg-[#EFEFEF] flex flex-col pb-[40px] px-[24px]"
   style={{ paddingTop: "clamp(40px, 14vh, 80px)" }}
 >            {/* ── Content Container ── */}
             <div className="relative z-10 w-full flex flex-col items-center justify-center flex-1 gap-[28px]">
@@ -116,7 +116,7 @@ tl.to(headlineRef.current, {
                 </div>
 
                 {/* ── Card Deck Centered ── */}
-                <div ref={deckRef} className="flex justify-center items-center w-full max-w-[260px] mx-auto">                    <CardDeck isMobile={true} delay={1.2} />
+                <div ref={deckRef} className="flex justify-center items-center w-full max-w-[260px] mx-auto relative z-20">                    <CardDeck isMobile={true} delay={1.2} />
                 </div>
 
                 {/* ── Buttons Full Width Stacked ── */}

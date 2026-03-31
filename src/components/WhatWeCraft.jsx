@@ -1,129 +1,66 @@
 'use client';
-import Image from 'next/image';
-import { useState } from 'react';
-import clsx from 'clsx';
+import ScrollVelocity from './ScrollVelocity';
 
 export default function WhatWeCraft() {
-    const [selectedCategory, setSelectedCategory] = useState(null);
+    const categories = ['WEBSITES', 'VIDEOS', 'GRAPHICS', 'UI/UX', 'MOTION GFX'];
 
-    const categories = ['WEBSITES', 'VIDEOS', 'GRAPHICS', 'MOTION GFX', 'UI/UX'];
-
-    const categoryMap = {
-        'WEBSITES': ['nakul', 'kiran'],
-        'VIDEOS': ['kk'],
-        'GRAPHICS': ['nakul', 'dilu'],
-        'UI/UX': ['dilu'],
-        'MOTION GFX': ['kk'],
-    };
+    const CategoryItems = () => (
+        <div className="flex items-center">
+            {categories.map((cat) => (
+                <button
+                    key={cat}
+                    className="group relative border border-white/20 px-8 py-4 md:px-14 md:py-6 text-white transition-all duration-300 hover:border-[#e03047] cursor-pointer overflow-hidden min-w-[180px] md:min-w-[240px] flex items-center justify-center text-center mr-4 md:mr-8"
+                    style={{
+                        fontFamily: 'Thedus-wl',
+                        fontWeight: 400,
+                        fontSize: 'clamp(14px, 1.2vw, 20px)',
+                        letterSpacing: '0.2em',
+                    }}
+                >
+                    <div className="absolute inset-0 bg-[#e03047] translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)]" />
+                    <span className="relative z-10 uppercase transition-colors duration-300">
+                        {cat}
+                    </span>
+                </button>
+            ))}
+        </div>
+    );
 
     return (
-        <section id="services" className="relative w-full bg-black flex flex-col items-center overflow-hidden
-            pb-12 md:pb-20 lg:pb-24"
-            style={{
-                paddingTop: 'calc(90px + clamp(10px, 5vh, 75px))',
-
-            }}
+        <section
+            id="services"
+            className="relative z-10 w-full bg-black flex flex-col items-center justify-center overflow-hidden py-16 md:py-24 shadow-[0_-20px_50px_rgba(0,0,0,0.5)]"
         >
-
-            {/* ── HEADLINE ── */}
             <h2
-                className="uppercase text-white text-center leading-[0.85] tracking-[-0.02em] mb-12 px-4"
+                className="uppercase text-white text-center leading-[0.85] mb-8 md:mb-12 px-6 max-w-6xl"
                 style={{
                     fontFamily: 'Humane-rg',
-                    fontSize: 'clamp(70px, 8vw, 150px)',
-
+                    fontSize: 'clamp(70px, 12vw, 160px)',
+                    letterSpacing: '0.01em'
                 }}
             >
-                WHAT WE CRAFT FOR BRANDS THAT WANT TO STAND OUT
+                WHAT WE CRAFT FOR BRANDS
             </h2>
 
-            {/* ── CATEGORY BUTTONS — z-index ensures clickable above images ── */}
-            <div
-                className="flex flex-wrap justify-center gap-3 px-4 w-full max-w-[1440px]"
-                onMouseLeave={() => setSelectedCategory(null)}
-                style={{ position: 'relative', zIndex: 20, marginBottom: '0' }}
+            <h2
+                className="uppercase text-white text-center leading-[0.85] mb-8 md:mb-12 px-6 max-w-6xl"
+                style={{
+                    fontFamily: 'Humane-rg',
+                    fontSize: 'clamp(70px, 12vw, 160px)',
+                    letterSpacing: '0.01em'
+                }}
             >
-                {categories.map((cat) => (
-                    <button
-                        key={cat}
-                        onClick={() => setSelectedCategory(cat)}
-                        onMouseEnter={() => setSelectedCategory(cat)}
-                        className={clsx(
-                            "border min-w-[140px] md:min-w-[245px] py-4 md:py-17 transition-colors cursor-pointer outline-none",
-                            selectedCategory === cat
-                                ? "bg-white text-black border-white"
-                                : "bg-black text-white border-[#333] hover:bg-[#111]"
-                        )}
-                        style={{
-                            fontFamily: 'Thedus-wl',
-                            fontSize: 'clamp(30px, 1vw, 18px)',
-                            letterSpacing: '0.1em',
-                            position: 'relative',
-                            zIndex: 20,
-                        }}
-                    >
-                        {cat}
-                    </button>
-                ))}
+                THAT WANT TO STAND OUT
+            </h2>
+
+            <div className="w-full relative z-20 overflow-hidden flex flex-col items-center">
+                <ScrollVelocity velocity={30} numCopies={5} className="flex">
+                    <CategoryItems />
+                </ScrollVelocity>
+                <ScrollVelocity velocity={-30} numCopies={5} className="flex" style={{ marginTop: '20px' }}>
+                    <CategoryItems />
+                </ScrollVelocity>
             </div>
-
-            {/* ── TEAM IMAGES ── */}
-            <div className="w-full flex justify-center items-end mt-[-20px] md:mt-12 flex-1">
-                <div className="relative w-full max-w-[1440px] h-full flex items-end justify-center px-4 gap-4">
-                    {['nakul', 'kiran', 'kk', 'dilu'].map((person) => {
-                        const isActive = categoryMap[selectedCategory]?.includes(person);
-
-                        return (
-                            <div
-                                key={person}
-                                className="flex-1 relative h-[40vh] md:h-[70vh] group overflow-hidden flex items-end justify-center"
-                                style={{
-                                    transform: isActive ? 'scale(1.15) translateY(-12px)' : 'scale(1) translateY(0px)',
-                                    transition: 'transform 0.9s cubic-bezier(0.34, 1.56, 0.64, 1)',
-                                    zIndex: isActive ? 5 : 1,
-                                }}
-                            //                                 style={{
-                            //                                     transform: isActive 
-                            //                                         ? 'scale(1.08) translateY(-14px)' 
-                            //                                         : 'scale(1) translateY(0px)',
-                            //                                     transition: 'transform 0.9s cubic-bezier(0.22, 1, 0.36, 1)',
-                            //                                     willChange: 'transform',
-                            //                                     zIndex: isActive ? 5 : 1,
-                            // }}
-                            >
-                                {/* Normal image — visible when NOT active */}
-                                <Image
-                                    src={`/hero/${person}.png`}
-                                    alt={person}
-                                    fill
-                                    className="object-contain object-bottom"
-                                    sizes="(max-width: 800px) 25vw, 20vw"
-                                    priority
-                                    style={{
-                                        opacity: isActive ? 0 : 1,
-                                        transition: 'opacity 0.4s ease',
-                                    }}
-                                />
-
-                                {/* Color image — visible when active */}
-                                <Image
-                                    src={`/hero/${person}color.png`}
-                                    alt={`${person} color`}
-                                    fill
-                                    className="object-contain object-bottom"
-                                    sizes="(max-width: 768px) 25vw, 20vw"
-                                    priority
-                                    style={{
-                                        opacity: isActive ? 1 : 0,
-                                        transition: 'opacity 0.4s ease',
-                                    }}
-                                />
-                            </div>
-                        );
-                    })}
-                </div>
-            </div>
-
         </section>
     );
 }

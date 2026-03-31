@@ -23,14 +23,14 @@ export default function WebsitesStack({ websites }) {
     }, []);
 
     return (
-        <div ref={containerRef} className="w-full flex flex-col ">
+        <div ref={containerRef} className="w-full flex flex-col gap-[30px]">
             {websites.map((site, i) => (
                 <div
                     key={site.id}
                     className="stack-card w-full"
                     style={{
                         position: 'sticky',
-                        top: `${80 + i * 24}px`,
+                        top: `${80 + i * 74}px`,
                         zIndex: i + 1,
                         transform: activeIndex > i ? `scale(${1 - (activeIndex - i) * 0.03})` : 'scale(1)',
                         transition: 'transform 0.4s ease',

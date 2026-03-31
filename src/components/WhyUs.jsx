@@ -118,16 +118,16 @@ export default function WhyUs() {
         <section
             id="about"
             ref={sectionRef}
-            className="snap-y snap-mandatory h-screen relative w-full min-h-screen bg-black overflow-hidden flex flex-col"
+            className="relative min-h-[100vh] md:min-h-[115vh] w-full bg-black overflow-hidden flex flex-col"
             style={{
                 paddingLeft: 'clamp(24px, 3vw, 48px)',
                 paddingRight: 'clamp(24px, 3vw, 48px)',
                 paddingTop: 'calc(90px + clamp(30px, 8vh, 80px))',
-                paddingBottom: 'clamp(36px, 5vh, 60px)',
+                paddingBottom: 'clamp(40px, 6vh, 60px)',
             }}
         >
             {/* ── MASSIVE HEADLINE ── */}
-            <div className="flex flex-col leading-[0.82] select-none w-full flex-1">
+            <div className="flex flex-col leading-[0.82] select-none w-full flex-1 mb-8">
 
                 {/* Line 1: WHY BRANDS CHOOSE */}
                 <div className="overflow-hidden" style={{ perspective: '1000px' }}>
@@ -139,7 +139,7 @@ export default function WhyUs() {
                             fontSize: 'clamp(110px, 18.2vw, 340px)',
                             transformOrigin: 'bottom center',
                             lineHeight: 0.82,
-                            paddingTop: 'clamp(0px, 1vh, 15px)',
+                            // paddingTop: 'clamp(0px, 1vh, 15px)',
                         }}
                     >
                         {'WHY BRANDS CHOOSE'.split('').map((ch, i) => (
@@ -155,7 +155,7 @@ export default function WhyUs() {
                 </div>
 
                 {/* Line 2: PIXELATED ? — with description inlined at bottom-right */}
-                <div className="flex items-end justify-between w-full mt-[-0.5vw]">
+                <div className="flex items-end justify-between w-full mt-[-8vw] md:mt-[-0.5vw]">
                     <div className="overflow-hidden" style={{ perspective: '1000px' }}>
                         <h2
                             ref={headline2Ref}
@@ -165,10 +165,12 @@ export default function WhyUs() {
                                 fontSize: 'clamp(110px, 18.5vw, 340px)',
                                 transformOrigin: 'bottom center',
                                 lineHeight: 0.82,
-                                paddingTop: 'clamp(12px, 6vh, 15px)',
+                                // paddingTop: 'clamp(0px, 0vh, 15px)',
+                                paddingBottom: 'clamp(0px, 0vh, 15px)',
+                                
                             }}
                         >
-                            {'PIXELATED ?'.split('').map((ch, i) => (
+                            {'PIXELATED?'.split('').map((ch, i) => (
                                 <span
                                     key={i}
                                     className="inline-block h-char"
@@ -193,9 +195,9 @@ export default function WhyUs() {
                         }}
                     >
                         WE DON&apos;T JUST DELIVER FILES.<br />
-                        WE BUILD DIGITAL ASSETS THAT<br />
-                        DRIVE ATTENTION, ENGAGEMENT, AND<br />
-                        CONVERSIONS.<br />
+                        WE BUILD DIGITAL ASSETS THAT DRIVE
+                        ATTENTION, ENGAGEMENT, AND CONVERSIONS.<br />
+                        {/* <br /> */}
                         EVERY PIXEL HAS A PURPOSE<br />
                         STRATEGY, DESIGN, AND<br />
                         PERFORMANCE WORKING TOGETHER.

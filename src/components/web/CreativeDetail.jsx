@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import Image from 'next/image';
 import { cleanUrl, isEmbedUrl, getYouTubeThumbnail } from '@/lib/mediaHelpers';
 import CreativeProjectModal from './CreativeProjectModal';
 
@@ -29,21 +30,21 @@ export default function CreativeDetail({ categoryItem, items, onClose, detailRed
     // }, { scope: containerRef, dependencies: [items] });
     useGSAP(() => {
 
-    const q = gsap.utils.selector(containerRef);
-    const cards = q('.project-card');
+        const q = gsap.utils.selector(containerRef);
+        const cards = q('.project-card');
 
-    const tl = gsap.timeline();
+        const tl = gsap.timeline();
 
-    tl.from(cards, {
-        y: 80,
-        opacity: 0,
-        duration: 0.8,
-        stagger: 0.18,
-        delay: 0.5,
-        ease: "power3.out"
-    });
+        tl.from(cards, {
+            y: 80,
+            opacity: 0,
+            duration: 0.8,
+            stagger: 0.18,
+            delay: 0.5,
+            ease: "power3.out"
+        });
 
-}, { scope: containerRef });
+    }, { scope: containerRef });
 
     useEffect(() => {
         // Delay refresh slightly to ensure DOM layout has fully settled (pin spacers removed, etc)
@@ -92,15 +93,20 @@ export default function CreativeDetail({ categoryItem, items, onClose, detailRed
                 }}
             >
                 <div
-                    className="flex items-center justify-center rounded-full creative-detail-icon-circle"
+                    className="flex items-center justify-center creative-detail-icon-circle"
                     style={{
-                        width: '300px',
-                        height: '300px',
-                        background: 'radial-gradient(circle at 35% 35%, #4a4a4a, #1a1a1a)',
-                        boxShadow: '0 30px 80px rgba(0,0,0,0.5), inset 0 2px 0 rgba(255,255,255,0.12)',
+                        width: '600px',
+                        height: '600px',
                     }}
                 >
-                    {categoryItem.icon}
+                    <Image
+                        src={categoryItem.icon}
+                        alt={categoryItem.key}
+                        width={400}
+                        height={400}
+                        className="object-contain drop-shadow-2xl"
+                        priority
+                    />
                 </div>
             </div>
 
@@ -156,8 +162,8 @@ export default function CreativeDetail({ categoryItem, items, onClose, detailRed
                                     className="project-card flex flex-col gap-3 cursor-pointer group"
                                 >
                                     <div
-                                        className="rounded-xl overflow-hidden relative transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)]"
-                                        style={{ aspectRatio: '3/4', backgroundColor: '#111', border: '1px solid rgba(255,255,255,0.1)' }}
+                                        className="rounded-xl overflow-hidden relative group-hover:shadow-[0_30px_70px_rgba(0,0,0,0.5)] transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)]"
+                                        style={{ aspectRatio: '3/4', backgroundColor: '#111' }}
                                     >
                                         <div className="w-full h-full transform transition-transform duration-700 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:scale-105">
                                             {thumbUrl ? (
