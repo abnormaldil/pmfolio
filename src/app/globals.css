@@ -155,6 +155,7 @@ html.lenis body {
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 90px;
+  
 }
 
 /* ── Global Section Spacing Tokens ── */

@@ -31,20 +31,20 @@ export default function Navbar() {
 
     useEffect(() => {
         // Initial state: hidden above
-        gsap.set([leftNavRef.current, centerNavRef.current, rightNavRef.current], { 
-            y: -100, 
-            opacity: 0 
+        gsap.set([leftNavRef.current, centerNavRef.current, rightNavRef.current], {
+            y: -100,
+            opacity: 0
         });
 
         const startNavAnimation = () => {
             const tl = gsap.timeline();
             tl.to(
                 [leftNavRef.current, centerNavRef.current, rightNavRef.current],
-                { 
-                    y: 0, 
-                    opacity: 1, 
-                    duration: 1.2, 
-                    stagger: 0.15, 
+                {
+                    y: 0,
+                    opacity: 1,
+                    duration: 1.2,
+                    stagger: 0.15,
                     ease: "power2.out",
                     delay: 0.3 // Slight delay after preloader split
                 }
@@ -346,7 +346,7 @@ export default function Navbar() {
                                 style={{
                                     fontFamily: 'Thedus-wl',
                                     fontWeight: 300,
-                                    fontSize: 'clamp(14px, 2.5vw, 32px)',
+                                    fontSize: 'clamp(19px, 1.2vw, 24px)',
                                 }}>
                                 CONTACT</span>
 
@@ -359,7 +359,7 @@ export default function Navbar() {
                                     style={{
                                         fontFamily: 'Thedus-wl',
                                         fontWeight: 300,
-                                        fontSize: 'clamp(14px, 2.5vw, 32px)',
+                                        fontSize: 'clamp(19px, 1.2vw, 24px)',
                                     }}>
                                     US
                                 </span>

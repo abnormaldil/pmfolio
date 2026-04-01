@@ -36,29 +36,29 @@ export default function HeroDesktop() {
                     duration: 1.2,
                     ease: "power2.out"
                 })
-                .to(rightColumnRef.current, {
-                    x: 0,
-                    opacity: 1,
-                    duration: 1.2,
-                    ease: "power2.out"
-                }, "-=1.0")
-                .to(marqueeRef.current, {
-                    opacity: 1,
-                    duration: 1.5,
-                    ease: "power2.inOut"
-                }, "-=0.8")
-                .to(btnContainerRef.current, {
-                    y: 0,
-                    opacity: 1,
-                    duration: 1,
-                    ease: "power2.out"
-                }, "-=1.0")
-                .to(deckContainerRef.current, {
-                    opacity: 1,
-                    scale: 1,
-                    duration: 1,
-                    ease: "power2.out"
-                }, "-=0.8");
+                    .to(rightColumnRef.current, {
+                        x: 0,
+                        opacity: 1,
+                        duration: 1.2,
+                        ease: "power2.out"
+                    }, "-=1.0")
+                    .to(marqueeRef.current, {
+                        opacity: 1,
+                        duration: 1.5,
+                        ease: "power2.inOut"
+                    }, "-=0.8")
+                    .to(btnContainerRef.current, {
+                        y: 0,
+                        opacity: 1,
+                        duration: 1,
+                        ease: "power2.out"
+                    }, "-=1.0")
+                    .to(deckContainerRef.current, {
+                        opacity: 1,
+                        scale: 1,
+                        duration: 1,
+                        ease: "power2.out"
+                    }, "-=0.8");
 
                 // Background Marquee Loop
                 const animate = () => {
@@ -83,7 +83,7 @@ export default function HeroDesktop() {
         return () => {
             if (animationId.current) cancelAnimationFrame(animationId.current);
             ctx.revert();
-            window.removeEventListener('finishLoading', () => {});
+            window.removeEventListener('finishLoading', () => { });
         };
     }, []);
 
@@ -91,7 +91,7 @@ export default function HeroDesktop() {
         <section id="home-desktop" className="relative w-full h-screen bg-[#EFEFEF] flex flex-col">
 
             {/* ── Background Marquee ── */}
-            <div 
+            <div
                 ref={marqueeRef}
                 className="absolute inset-0 pointer-events-none z-0 flex items-center overflow-hidden"
                 style={{
@@ -134,17 +134,17 @@ export default function HeroDesktop() {
             {/* ── Foreground ── */}
             <div className="relative z-10 w-full h-full flex flex-col py-4 justify-center"
                 style={{
-                    paddingLeft: 'clamp(32px, 6vw, 100px)',
-                    paddingRight: 'clamp(32px, 6vw, 100px)',
-                    paddingTop: '130px',
-                    paddingBottom: '130px',
+                    paddingLeft: 'clamp(32px, 5vw, 80px)',
+                    paddingRight: 'clamp(32px, 5vw, 80px)',
+                    paddingTop: 'clamp(90px, 10vh, 110px)',
+                    paddingBottom: 'clamp(60px, 8vh, 90px)',
                 }}>
 
                 {/* ── Main 3-col layout ── */}
                 <div className="flex-1 grid grid-cols-12 gap-4 items-center h-full">
 
                     {/* ── LEFT: Headline + Buttons — 4 cols ── */}
-                    <div 
+                    <div
                         ref={leftColumnRef}
                         className="col-span-4 flex flex-col justify-center z-20 h-full w-full">
 
@@ -154,7 +154,7 @@ export default function HeroDesktop() {
                                 style={{
                                     fontFamily: 'Humane-l',
                                     fontWeight: 300,
-                                    fontSize: 'clamp(32px, 5vw, 150px)',
+                                    fontSize: 'clamp(32px, 6vw, 130px)',
                                     color: '#111',
                                 }}
                             >
@@ -166,7 +166,7 @@ export default function HeroDesktop() {
                                 style={{
                                     fontFamily: 'Humane-L',
                                     fontWeight: 300,
-                                    fontSize: 'clamp(60px, 10vw, 280px)',
+                                    fontSize: 'clamp(60px, 11vw, 250px)',
                                     color: '#e03047',
                                 }}
                             >
@@ -178,7 +178,7 @@ export default function HeroDesktop() {
                                 style={{
                                     fontFamily: 'Humane-l',
                                     fontWeight: 300,
-                                    fontSize: 'clamp(32px, 5vw, 150px)',
+                                    fontSize: 'clamp(32px, 6vw, 130px)',
                                     color: '#111',
                                 }}
                             >
@@ -190,17 +190,17 @@ export default function HeroDesktop() {
                                 style={{
                                     fontFamily: 'Humane-L',
                                     fontWeight: 300,
-                                    fontSize: 'clamp(60px, 10vw, 280px)',
+                                    fontSize: 'clamp(60px, 11vw, 250px)',
                                     color: '#111',
                                 }}
                             >
                                 WORKS
                             </h2>
                         </div>
-
+‎ 
                         {/* CTA Buttons */}
-                        <div ref={btnContainerRef} className="mt-10 flex flex-col items-start w-full">
-                            <div className="flex items-stretch h-[60px] gap-2 w-full">
+                        <div ref={btnContainerRef} className="mt-6 flex flex-col items-start w-full">
+                            <div className="flex items-stretch h-[52px] gap-2 w-full">
 
                                 {/* UPGRADE YOUR BRAND */}
                                 <Link
@@ -209,7 +209,7 @@ export default function HeroDesktop() {
                                     style={{
                                         fontFamily: 'Thedus-wl',
                                         fontWeight: 500,
-                                        fontSize: 'clamp(14px, 1.2vw, 26px)',
+                                        fontSize: 'clamp(14px, 1.2vw, 16px)',
                                         letterSpacing: '0.05em',
                                         flex: 1.15,
                                         textTransform: 'uppercase',
@@ -231,7 +231,7 @@ export default function HeroDesktop() {
                                     style={{
                                         fontFamily: 'Thedus-wl',
                                         fontWeight: 500,
-                                        fontSize: 'clamp(14px, 1.2vw, 26px)',
+                                        fontSize: 'clamp(14px, 1.2vw, 16px)',
                                         letterSpacing: '0.05em',
                                         flex: 1,
                                         border: '1px solid #d4d4d4',
@@ -251,11 +251,11 @@ export default function HeroDesktop() {
 
                             {/* Tagline below buttons */}
                             <p
-                                className="mt-3 uppercase text-left pl-1 w-full"
+                                className="mt-3 uppercase text-center w-full"
                                 style={{
                                     fontFamily: 'Thedus-wl',
-                                    fontWeight: 300,
-                                    fontSize: 'clamp(10px, 0.8vw, 14px)',
+                                    fontWeight: 500,
+                                    fontSize: 'clamp(14px, 1.2vw, 16px)',
                                     letterSpacing: '0.06em',
                                     color: '#111',
                                 }}
@@ -273,11 +273,12 @@ export default function HeroDesktop() {
                     </div>
 
                     {/* ── RIGHT: Description top + Powered By bottom ── */}
-                    <div 
+                    <div
                         ref={rightColumnRef}
                         className="col-span-3 flex flex-col justify-between h-full py-8 items-end text-right w-full">
 
-                      /
+‎ 
+
 
                         {/* Bottom: Powered By */}
                         <div className="flex flex-col items-end mb-10">
@@ -298,12 +299,12 @@ export default function HeroDesktop() {
                                 style={{
                                     fontFamily: 'Humane-l',
                                     fontWeight: 300,
-                                    fontSize: 'clamp(50px, 8vw, 175px)',
+                                    fontSize: 'clamp(50px, 7vw, 155px)',
                                     color: '#000000ff',
                                 }}
                             >
                                 BRANDS WORLDWIDE
-            
+
                             </h3>
                         </div>
                         <div className="flex flex-col items-end mb-10">
@@ -324,12 +325,12 @@ export default function HeroDesktop() {
                                 style={{
                                     fontFamily: 'Humane-l',
                                     fontWeight: 300,
-                                    fontSize: 'clamp(50px, 8vw, 175px)',
+                                    fontSize: 'clamp(50px, 7vw, 155px)',
                                     color: '#000000ff',
                                 }}
                             >
                                 100+ PROJECTS
-            
+
                             </h3>
                         </div>
                     </div>

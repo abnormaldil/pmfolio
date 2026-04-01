@@ -139,7 +139,7 @@ export default function WhyUs() {
                             fontSize: 'clamp(110px, 18.2vw, 340px)',
                             transformOrigin: 'bottom center',
                             lineHeight: 0.82,
-                            // paddingTop: 'clamp(0px, 1vh, 15px)',
+                            paddingTop: 'clamp(0px, 1vh, 15px)',
                         }}
                     >
                         {'WHY BRANDS CHOOSE'.split('').map((ch, i) => (

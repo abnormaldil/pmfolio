@@ -21,8 +21,8 @@ export default function CardDeck({ isMobile = false, delay = 0 }) {
     ];
 
     // Deck dimensions
-    const deckWidth = isMobile ? '165px' : '364px';
-    const deckHeight = isMobile ? '240px' : '511px';
+    const deckWidth = isMobile ? '165px' : '330px';
+    const deckHeight = isMobile ? '240px' : '460px';
 
     // 3D depth values (creates stacked thickness)
     const depth = [0, -20, -40, -60];
